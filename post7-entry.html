@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POST 7 — VEHICLE ENTRY</title>
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #002975;
+      --primary-container: #003da5;
+      --secondary: #00658d;
+      --secondary-container: #41befd;
+      --tertiary: #6e5e00;
+      --tertiary-container: #c6aa00;
+
+      --surface: #f9f9f9;
+      --surface-low: #f3f3f3;
+      --surface-lowest: #ffffff;
+
+      --on-surface: #1a1c1c;
+      --on-primary: #ffffff;
+      --outline: #747684;
+      --outline-variant: #c4c6d5;
+
+      --error: #ba1a1a;
+      --success: #1db96a;
+
+      --header-h: 56px;
+      --footer-h: 48px;
+
+      --border-radius: 4px;
+      --border-radius-lg: 8px;
+    }
+
+    body.dark {
+      --primary: #477cff;
+      --primary-container: #003da5;
+      --secondary: #41befd;
+      --secondary-container: #004b69;
+      --surface: #0a0c0f;
+      --surface-low: #121518;
+      --surface-lowest: #1a1e26;
+      --on-surface: #e0e3ea;
+      --outline: #6b7280;
+      --outline-variant: #252a35;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: var(--surface);
+      color: var(--on-surface);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .material-symbols-outlined.filled {
+      font-variation-settings: 'FILL' 1;
+    }
+
+    /* TYPOGRAPHY */
+    .text-xs {
+      font-size: 0.75rem;
+    }
+
+    .text-sm {
+      font-size: 0.875rem;
+    }
+
+    .text-base {
+      font-size: 1rem;
+    }
+
+    .text-lg {
+      font-size: 1.125rem;
+    }
+
+    .text-xl {
+      font-size: 1.25rem;
+    }
+
+    .text-2xl {
+      font-size: 1.5rem;
+    }
+
+    .text-3xl {
+      font-size: 1.875rem;
+    }
+
+    .font-bold {
+      font-weight: 700;
+    }
+
+    .font-black {
+      font-weight: 900;
+    }
+
+    .uppercase {
+      text-transform: uppercase;
+    }
+
+    .tracking-widest {
+      letter-spacing: 0.1em;
+    }
+
+    .opacity-70 {
+      opacity: 0.7;
+    }
+
+    /* LAYOUT */
+    .flex {
+      display: flex;
+    }
+
+    .flex-col {
+      flex-direction: column;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .justify-center {
+      justify-content: center;
+    }
+
+    .gap-1 {
+      gap: 0.25rem;
+    }
+
+    .gap-2 {
+      gap: 0.5rem;
+    }
+
+    .gap-3 {
+      gap: 0.75rem;
+    }
+
+    .gap-4 {
+      gap: 1rem;
+    }
+
+    .gap-6 {
+      gap: 1.5rem;
+    }
+
+    .flex-1 {
+      flex: 1;
+    }
+
+    .w-full {
+      width: 100%;
+    }
+
+    .h-full {
+      height: 100%;
+    }
+
+    /* HEADER */
+    header {
+      background-color: rgba(0, 61, 165, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: white;
+      height: var(--header-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      border-bottom: none;
+      z-index: 50;
+      flex-shrink: 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    body.dark header {
+      background-color: rgba(0, 61, 165, 0.85);
+      border-bottom: none;
+    }
+
+    .badge-post {
+      background: white;
+      color: #003da5;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+      }
+    }
+
+    .nav-link {
+      color: var(--outline);
+      text-decoration: none;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--on-surface);
+    }
+
+    .nav-link.active {
+      font-weight: 600;
+    }
+
+    /* MAIN CONTAINER */
+    main {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* 3-COLUMN GRID */
+    .grid-container {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      padding: 2.5rem;
+      overflow-y: auto;
+    }
+
+    .column-card {
+      background: var(--surface-low);
+      border-radius: var(--border-radius-lg);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .col-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary-container);
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    /* INPUTS & FIELDS */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--outline);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      height: 2.5rem;
+      background: var(--surface-lowest);
+      border: 1px solid var(--outline-variant);
+      color: var(--on-surface);
+      padding: 0 1rem;
+      border-radius: var(--border-radius);
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 2px rgba(0, 101, 141, 0.2);
+    }
+
+    /* LICENSE PLATE SPECIAL */
+    .plate-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .plate-input {
+      flex: 1;
+      height: 3.5rem !important;
+      border: 2px solid var(--tertiary-container) !important;
+      font-size: 1.75rem !important;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-align: center;
+      letter-spacing: 0.1em;
+    }
+
+    .plate-input:focus {
+      border-color: var(--secondary) !important;
+    }
+
+    .btn-scan {
+      background: var(--secondary-container);
+      color: #004b69;
+      /* on-secondary-container */
+      border: none;
+      padding: 0 1.5rem;
+      font-size: 1rem;
+      border-radius: var(--border-radius);
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: opacity 0.2s;
+    }
+
+    .btn-scan:hover {
+      opacity: 0.9;
+    }
+
+    /* CHIP SELECTORS */
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.375rem;
+    }
+
+    .chip-input {
+      display: none;
+    }
+
+    .chip-label {
+      background: var(--surface-lowest);
+      color: var(--outline);
+      border: 1px solid var(--outline-variant);
+      padding: 0.375rem 0.75rem;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .chip-label:hover {
+      border-color: var(--secondary);
+      background: rgba(0, 101, 141, 0.05);
+    }
+
+    .chip-input:checked+.chip-label {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* CAMERA WRAPPER */
+    .camera-wrapper {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 1rem;
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    .camera-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.8;
+    }
+
+    .cam-status {
+      position: absolute;
+      top: 0.5rem;
+      left: 0.5rem;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      font-size: 0.625rem;
+      padding: 2px 6px;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dot-rec {
+      width: 8px;
+      height: 8px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    /* SYSTEM NOTE */
+    .sys-note {
+      background: rgba(198, 170, 0, 0.1);
+      border-left: 4px solid var(--tertiary-container);
+      padding: 0.75rem;
+      border-radius: 0 4px 4px 0;
+      margin-top: 1rem;
+    }
+
+    .sys-title {
+      color: var(--tertiary-container);
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .sys-text {
+      color: var(--on-surface);
+      font-size: 0.6875rem;
+      line-height: 1.4;
+    }
+
+    /* GATE STATUS CARDS */
+    .status-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(196, 198, 213, 0.2);
+    }
+
+    .status-card {
+      background: var(--surface-lowest);
+      border: 2px solid rgba(0, 101, 141, 0.2);
+      padding: 1rem;
+      text-align: center;
+      border-radius: 4px;
+    }
+
+    .status-card .icon {
+      color: var(--secondary);
+      font-size: 1.875rem;
+      margin-bottom: 4px;
+    }
+
+    .status-title {
+      font-size: 0.625rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--secondary);
+    }
+
+    .status-val {
+      font-size: 0.875rem;
+      font-weight: 900;
+      color: var(--on-surface);
+      margin-top: 2px;
+    }
+
+    /* LOG DRAWER */
+    .log-drawer {
+      width: 320px;
+      background: var(--surface-lowest);
+      border-left: 1px solid var(--outline-variant);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+
+    .log-drawer.closed {
+      transform: translateX(100%);
+      margin-right: -320px;
+    }
+
+    .log-header {
+      padding: 1rem;
+      border-bottom: 1px solid var(--outline-variant);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .log-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .log-item {
+      background: var(--surface-lowest);
+      padding: 0.75rem;
+      border-radius: 4px;
+      border: 1px solid var(--outline-variant);
+      display: flex;
+      gap: 0.75rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .log-icon {
+      width: 2rem;
+      height: 2rem;
+      background: rgba(0, 101, 141, 0.1);
+      color: var(--secondary);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .log-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .log-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .log-plate {
+      font-size: 0.625rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .log-time {
+      font-size: 0.5rem;
+      color: var(--outline);
+    }
+
+    .log-desc {
+      font-size: 0.5625rem;
+      color: var(--outline);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 2px 0;
+    }
+
+    .log-pill {
+      display: inline-flex;
+      background: rgba(0, 101, 141, 0.1);
+      color: var(--secondary);
+      font-size: 0.5rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 999px;
+    }
+
+    .log-footer {
+      padding: 1rem;
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    /* STATUS DOT */
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    /* FOOTER / ACTION BAR */
+    footer {
+      height: var(--footer-h);
+      background: var(--surface-lowest);
+      border-top: 1px solid var(--outline-variant);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      box-shadow: 0 -4px 20px rgba(0, 41, 117, 0.08);
+      z-index: 50;
+    }
+
+    .btn-action {
+      height: 2rem;
+      padding: 0 1rem;
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-radius: 2px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .btn-log {
+      color: var(--outline);
+    }
+
+    .btn-log:hover {
+      background: var(--surface-low);
+    }
+
+    .badge-count {
+      background: var(--primary-container);
+      color: white;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 0.5rem;
+    }
+
+    .btn-clear {
+      border-color: var(--outline-variant);
+      color: var(--outline);
+    }
+
+    .btn-clear:hover {
+      background: var(--surface-low);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      padding: 0 2rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-container);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(29, 185, 106, 0.1);
+      border: 1px solid var(--success);
+      color: var(--success);
+      padding: 0.75rem 1.25rem;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.3s forwards;
+    }
+
+    .toast.show {
+      display: flex;
+    }
+
+    .toast.error {
+      background: rgba(186, 26, 26, 0.1);
+      border-color: var(--error);
+      color: var(--error);
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+
+      .log-drawer {
+        position: fixed;
+        right: 0;
+        top: var(--header-h);
+        bottom: var(--footer-h);
+        z-index: 40;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="flex items-center gap-4">
+      <div class="badge-post">POST 7</div>
+      <div class="flex flex-col">
+        <h1 style="font-size:1.125rem; font-weight:600; letter-spacing:-0.015em; line-height:1.2">VEHICLE ENTRY</h1>
+        <span style="font-size:0.65rem; font-weight:500; text-transform:uppercase; letter-spacing:0.05em; opacity:0.8">Gate Access Control System</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-6">
+      <div class="text-right hidden sm:block">
+        <div id="clock" style="font-size:0.875rem; font-weight:600; letter-spacing:0.02em; line-height:1.2">--:--:--</div>
+        <div id="clock-date" style="font-size:0.65rem; font-weight:500; text-transform:uppercase; letter-spacing:0.05em; opacity:0.8">---</div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-xl cursor-pointer" onclick="toggleTheme()"
+          title="Toggle Theme">light_mode</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="grid-container">
+      <!-- COL 1: Identity -->
+      <div class="column-card">
+        <div class="col-header">
+          <span class="material-symbols-outlined">badge</span>
+          License Plate & Driver
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">License Plate Number</label>
+          <div class="plate-row">
+            <input type="text" id="plate" class="plate-input" placeholder="B 1234 ABC" autocomplete="off"
+              maxlength="12">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Driver Full Name</label>
+          <input type="text" id="driver" placeholder="Enter full name" autocomplete="off">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Company / Vendor</label>
+          <input type="text" id="company" placeholder="e.g. DHL Logistics" autocomplete="off">
+        </div>
+      </div>
+
+      <!-- COL 2: License & ID -->
+      <div class="column-card">
+        <div class="col-header">
+          <span class="material-symbols-outlined">identity_platform</span>
+          License & ID
+        </div>
+
+        <div class="field-group" style="margin-bottom:0.5rem">
+          <label class="field-label">Identification Type (SIM)</label>
+          <div class="chip-group">
+            <input type="radio" name="simtype" id="sim-a" value="SIM A" class="chip-input">
+            <label for="sim-a" class="chip-label">SIM A</label>
+            <input type="radio" name="simtype" id="sim-b1" value="SIM B1" class="chip-input">
+            <label for="sim-b1" class="chip-label">SIM B1</label>
+            <input type="radio" name="simtype" id="sim-b2" value="SIM B2" class="chip-input">
+            <label for="sim-b2" class="chip-label">SIM B2</label>
+            <input type="radio" name="simtype" id="sim-ktp" value="KTP" class="chip-input">
+            <label for="sim-ktp" class="chip-label">KTP</label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">ID Identification Number</label>
+          <input type="text" id="ktp" placeholder="3275XXXXXXXXXXXX" autocomplete="off">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Driver Card No (System ID)</label>
+          <input type="text" id="driver-card" placeholder="DC-889021" autocomplete="off">
+        </div>
+
+        <div class="field-group" style="margin-bottom:0.5rem;margin-top:0.5rem">
+          <label class="field-label">Annotation (Invalid Document)</label>
+          <div class="chip-group">
+            <input type="checkbox" name="annotation" id="ann-sim-exp" value="SIM EXPIRED" class="chip-input">
+            <label for="ann-sim-exp" class="chip-label">SIM EXP</label>
+            <input type="checkbox" name="annotation" id="ann-stnk-exp" value="STNK EXPIRED" class="chip-input">
+            <label for="ann-stnk-exp" class="chip-label">STNK EXP</label>
+            <input type="checkbox" name="annotation" id="ann-kir-exp" value="KIR EXPIRED" class="chip-input">
+            <label for="ann-kir-exp" class="chip-label">KIR EXP</label>
+            <input type="checkbox" name="annotation" id="ann-sim-tilang" value="SIM TILANG" class="chip-input">
+            <label for="ann-sim-tilang" class="chip-label">SIM TILANG</label>
+            <input type="checkbox" name="annotation" id="ann-stnk-tilang" value="STNK TILANG" class="chip-input">
+            <label for="ann-stnk-tilang" class="chip-label">STNK TILANG</label>
+            <input type="checkbox" name="annotation" id="ann-kir-tilang" value="KIR TILANG" class="chip-input">
+            <label for="ann-kir-tilang" class="chip-label">KIR TILANG</label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Approved By (If Invalid)</label>
+          <input type="text" id="approver" placeholder="Approver Name" autocomplete="off">
+        </div>
+
+        <div class="sys-note">
+          <div class="sys-title"><span class="material-symbols-outlined" style="font-size:14px">warning</span> System
+            Note</div>
+          <div class="sys-text">Driver database connection ready. Ensure ID matches physical card.</div>
+        </div>
+      </div>
+
+      <!-- COL 3: Vehicle -->
+      <div class="column-card">
+        <div class="col-header">
+          <span class="material-symbols-outlined">local_shipping</span>
+          Vehicle & Destination
+        </div>
+
+        <div class="field-group" style="margin-bottom:0.5rem">
+          <label class="field-label">Vehicle Type</label>
+          <div class="chip-group">
+            <input type="radio" name="vtype" id="vt-car" value="Car" class="chip-input">
+            <label for="vt-car" class="chip-label">Car</label>
+            <input type="radio" name="vtype" id="vt-truck" value="Truck" class="chip-input">
+            <label for="vt-truck" class="chip-label">Truck</label>
+            <input type="radio" name="vtype" id="vt-cdd" value="CDD" class="chip-input">
+            <label for="vt-cdd" class="chip-label">CDD</label>
+            <input type="radio" name="vtype" id="vt-cde" value="CDE" class="chip-input">
+            <label for="vt-cde" class="chip-label">CDE</label>
+            <input type="radio" name="vtype" id="vt-wb" value="Wingbox" class="chip-input">
+            <label for="vt-wb" class="chip-label">Wingbox</label>
+            <input type="radio" name="vtype" id="vt-fuso" value="Fuso Box" class="chip-input">
+            <label for="vt-fuso" class="chip-label">Fuso Box</label>
+            <input type="radio" name="vtype" id="vt-iso" value="Isotank" class="chip-input">
+            <label for="vt-iso" class="chip-label">Isotank</label>
+            <input type="radio" name="vtype" id="vt-pickup" value="Pickup" class="chip-input">
+            <label for="vt-pickup" class="chip-label">Pickup</label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Internal Destination</label>
+          <div class="chip-group">
+            <input type="radio" name="dest" id="dt-wha" value="WH A" class="chip-input">
+            <label for="dt-wha" class="chip-label">WH A</label>
+            <input type="radio" name="dest" id="dt-whb" value="WH B" class="chip-input">
+            <label for="dt-whb" class="chip-label">WH B</label>
+            <input type="radio" name="dest" id="dt-whc" value="WH C" class="chip-input">
+            <label for="dt-whc" class="chip-label">WH C</label>
+            <input type="radio" name="dest" id="dt-hair" value="Hair Care" class="chip-input">
+            <label for="dt-hair" class="chip-label">Hair Care</label>
+            <input type="radio" name="dest" id="dt-fab" value="Fabric Care" class="chip-input">
+            <label for="dt-fab" class="chip-label">Fabric Care</label>
+            <input type="radio" name="dest" id="dt-ws" value="Workshop" class="chip-input">
+            <label for="dt-ws" class="chip-label">Workshop</label>
+            <input type="radio" name="dest" id="dt-plant" value="Plant" class="chip-input">
+            <label for="dt-plant" class="chip-label">Plant</label>
+          </div>
+        </div>
+
+        <div class="field-group" style="margin-bottom:0.5rem">
+          <label class="field-label">Shipment Status</label>
+          <div class="chip-group">
+            <input type="checkbox" name="shipment" id="ship-load" value="LOADING" class="chip-input">
+            <label for="ship-load" class="chip-label">LOADING</label>
+            <input type="checkbox" name="shipment" id="ship-unload" value="UNLOADING" class="chip-input">
+            <label for="ship-unload" class="chip-label">UNLOADING</label>
+            <input type="checkbox" name="shipment" id="ship-export" value="EXPORT" class="chip-input">
+            <label for="ship-export" class="chip-label">EXPORT</label>
+            <input type="checkbox" name="shipment" id="ship-import" value="IMPORT" class="chip-input">
+            <label for="ship-import" class="chip-label">IMPORT</label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Products (To be unloaded)</label>
+          <input type="text" id="products" placeholder="e.g. Raw Materials" autocomplete="off">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Details / Remarks</label>
+          <input type="text" id="details" placeholder="Additional info" autocomplete="off">
+        </div>
+      </div>
+    </div>
+
+    <!-- LOG DRAWER -->
+    <aside class="log-drawer" id="log-drawer">
+      <div class="log-header">
+        <div>
+          <h3
+            style="color:var(--primary-container);font-weight:700;font-size:0.625rem;text-transform:uppercase;letter-spacing:0.1em">
+            System Logs</h3>
+          <p style="font-size:0.5625rem;color:var(--outline);text-transform:uppercase">Today's Activity</p>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <button onclick="clearLocalLogs()" style="background:none;border:none;color:#e53e3e;font-size:0.625rem;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:4px">
+            <span class="material-symbols-outlined" style="font-size:14px">delete</span> Clear
+          </button>
+          <button
+            style="background:none;border:none;color:var(--primary);font-size:0.625rem;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:4px">
+            <span class="material-symbols-outlined" style="font-size:14px">download</span> Export
+          </button>
+        </div>
+      </div>
+
+      <div class="log-list" id="log-body">
+        <div style="padding:1rem;color:var(--outline);font-size:0.75rem;text-align:center">No entries yet today</div>
+      </div>
+
+      <div class="log-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem">
+          <div
+            style="width:2rem;height:2rem;background:var(--surface-low);display:flex;align-items:center;justify-content:center;border-radius:4px">
+            <span class="material-symbols-outlined" style="font-size:1.125rem;color:var(--outline)">hardware</span>
+          </div>
+          <div>
+            <div style="font-size:0.625rem;font-weight:700;text-transform:uppercase">Hardware Status</div>
+            <div style="font-size:0.5625rem;font-weight:700;text-transform:uppercase;color:var(--success)">All Systems
+              Nominal</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="flex items-center gap-6">
+      <div class="flex items-center gap-2">
+        <div class="pulse-dot"></div>
+        <span class="text-xs font-bold uppercase" style="color:var(--outline);letter-spacing:0.05em"
+          id="sync-status">Ready for Entry</span>
+      </div>
+      <div class="hidden sm:block">
+        <span class="text-[10px] font-bold" style="color:var(--primary)">&copy; rrfmargaret</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button class="btn-action btn-log" onclick="toggleLog()">
+        <span class="material-symbols-outlined" style="font-size:14px">history</span>
+        View Log
+        <span class="badge-count" id="log-count">0</span>
+      </button>
+      <div style="width:1px;height:1rem;background:var(--outline-variant);margin:0 0.5rem"></div>
+      <button class="btn-action btn-clear" onclick="resetForm()">Clear</button>
+      <button class="btn-action btn-primary" onclick="submitEntry()">
+        <span class="material-symbols-outlined" style="font-size:16px">check_circle</span>
+        Log Entry
+      </button>
+    </div>
+  </footer>
+
+  <!-- MODALS & OVERLAYS -->
+  <div class="toast" id="toast">
+    <span class="material-symbols-outlined" id="toast-icon">check_circle</span>
+    <span id="toast-msg">Entry logged successfully!</span>
+  </div>
+
+  <script>
+    // --- THEME ---
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('gate_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('gate_theme') === 'dark') document.body.classList.add('dark');
+
+    // --- CLOCK ---
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      document.getElementById('clock-date').textContent = `${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`.toUpperCase();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // --- LOG UI ---
+    function toggleLog() {
+      document.getElementById('log-drawer').classList.toggle('closed');
+    }
+
+    // --- LOGIC ---
+    const systemVehicleCache = (() => {
+      try { return JSON.parse(localStorage.getItem('gate_vehicle_cache') || '{}'); } catch { return {}; }
+    })();
+
+    function saveVehicleCache(entry) {
+      const cleanPlate = String(entry.plate).toUpperCase().replace(/\s+/g, '');
+      systemVehicleCache[cleanPlate] = {
+        driver: entry.driver,
+        company: entry.company,
+        simtype: entry.simtype,
+        ktp: entry.ktp,
+        driverCard: entry.driverCard,
+        vtype: entry.vtype
+      };
+      localStorage.setItem('gate_vehicle_cache', JSON.stringify(systemVehicleCache));
+    }
+
+    let activeEntriesCache = [];
+    async function preloadActiveEntries() {
+      if (!SHEET_URL) return;
+      try {
+        const res = await fetch(`${SHEET_URL}?action=getActiveEntries`);
+        const json = await res.json();
+        if (json.status === 'ok') {
+          activeEntriesCache = json.entries.map(e => String(e.plate).toUpperCase().replace(/\s+/g, ''));
+        }
+      } catch {}
+    }
+    preloadActiveEntries();
+    setInterval(preloadActiveEntries, 60000); // refresh every minute
+
+    function autofillVehicle(plateStr) {
+      const cleanInput = String(plateStr).toUpperCase().replace(/\s+/g, '');
+      if (!cleanInput || cleanInput.length < 3) return;
+      
+      let cached = systemVehicleCache[cleanInput];
+      if (!cached) {
+        // Fallback for older cache entries with spaces
+        const matchingKey = Object.keys(systemVehicleCache).find(k => String(k).toUpperCase().replace(/\s+/g, '') === cleanInput);
+        if (matchingKey) cached = systemVehicleCache[matchingKey];
+      }
+
+      if (cached) {
+        if (cached.driver) document.getElementById('driver').value = cached.driver;
+        if (cached.company) document.getElementById('company').value = cached.company;
+        if (cached.ktp) document.getElementById('ktp').value = cached.ktp;
+        if (cached.driverCard) document.getElementById('driver-card').value = cached.driverCard;
+        
+        if (cached.simtype) {
+           const sc = Array.from(document.querySelectorAll('input[name="simtype"]')).find(el => el.value === cached.simtype);
+           if (sc) sc.checked = true;
+        }
+
+        if (cached.vtype) {
+           const vc = Array.from(document.querySelectorAll('input[name="vtype"]')).find(el => el.value === cached.vtype);
+           if (vc) vc.checked = true;
+        }
+      }
+    }
+
+    function clearLocalLogs() {
+      if(confirm('Are you sure you want to clear the local logs? This does not delete any data from Google Sheets.')) {
+        localStorage.removeItem(getTodayKey());
+        renderLog();
+        document.getElementById('log-count').textContent = '0';
+        showToast('Local logs cleared');
+      }
+    }
+
+    document.querySelectorAll('input[type="text"]').forEach(input => {
+      input.addEventListener('input', function () {
+        let val = this.value.toUpperCase();
+        if (this.id === 'plate') {
+          val = val.replace(/\s+/g, '');
+          autofillVehicle(val);
+        }
+        this.value = val;
+      });
+    });
+
+    function getTodayKey() {
+      const d = new Date();
+      return `gate_log_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
+    }
+
+    function getLogs() {
+      try { return JSON.parse(localStorage.getItem(getTodayKey()) || '[]'); } catch { return []; }
+    }
+
+    function saveLogs(logs) {
+      localStorage.setItem(getTodayKey(), JSON.stringify(logs));
+    }
+
+    function renderLog() {
+      const logs = getLogs();
+      const tbody = document.getElementById('log-body');
+      document.getElementById('log-count').textContent = logs.length;
+
+      if (logs.length === 0) {
+        tbody.innerHTML = '<div style="padding:1rem;color:var(--outline);font-size:0.75rem;text-align:center">No entries yet today</div>';
+        return;
+      }
+
+      tbody.innerHTML = logs.slice().reverse().map(e => `
+        <div class="log-item">
+            <div class="log-icon"><span class="material-symbols-outlined">login</span></div>
+            <div class="log-content">
+                <div class="log-top">
+                    <span class="log-plate">${e.plate}</span>
+                    <span class="log-time">${e.timeIn}</span>
+                </div>
+                <p class="log-desc">${e.driver} - ${e.dest}</p>
+                <span class="log-pill">AUTHORIZED</span>
+            </div>
+        </div>
+    `).join('');
+    }
+    renderLog();
+
+    function getTimestamp() {
+      const now = new Date();
+      return String(now.getHours()).padStart(2, '0') + ':' +
+        String(now.getMinutes()).padStart(2, '0') + ':' + String(now.getSeconds()).padStart(2, '0');
+    }
+
+    async function submitEntry() {
+      const plate = document.getElementById('plate').value.trim();
+      const driver = document.getElementById('driver').value.trim();
+      const company = document.getElementById('company').value.trim();
+      const ktp = document.getElementById('ktp').value.trim();
+      const driverCard = document.getElementById('driver-card').value.trim();
+      const simEl = document.querySelector('input[name="simtype"]:checked');
+      const vtypeEl = document.querySelector('input[name="vtype"]:checked');
+      const destEl = document.querySelector('input[name="dest"]:checked');
+
+      const approver = document.getElementById('approver').value.trim();
+      const products = document.getElementById('products').value.trim();
+      const details = document.getElementById('details').value.trim();
+      
+      const annotationEls = document.querySelectorAll('input[name="annotation"]:checked');
+      const annotations = Array.from(annotationEls).map(el => el.value).join(', ');
+
+      const shipmentEls = document.querySelectorAll('input[name="shipment"]:checked');
+      const shipments = Array.from(shipmentEls).map(el => el.value).join(', ');
+
+      if (!plate) return highlight('plate', 'Enter license plate');
+      if (!driver) return highlight('driver', 'Enter driver name');
+      if (!company) return highlight('company', 'Enter company');
+      if (!simEl) return showToast('Select SIM type', true);
+      if (!ktp) return highlight('ktp', 'Enter ID number');
+      if (!driverCard) return highlight('driver-card', 'Enter card number');
+      if (!vtypeEl) return showToast('Select vehicle type', true);
+      if (!destEl) return showToast('Select destination', true);
+      if (!shipments) return showToast('Select shipment status', true);
+
+      const btn = document.querySelector('.btn-primary');
+      if (btn) btn.disabled = true;
+
+      // Instant Duplicate Validation via Cache + Local Activity
+      const cleanPlate = plate.toUpperCase().replace(/\s+/g, '');
+      if (activeEntriesCache.includes(cleanPlate)) {
+        showToast(`Gagal: Kendaraan ${plate} belum keluar dari Post 1!`, true);
+        if (btn) btn.disabled = false;
+        return;
+      }
+      
+      // Also check local logs just in case cache is delayed by 1 min (prevent double-clicks within 2 mins)
+      const recentLocal = getLogs().find(e => String(e.plate).toUpperCase().replace(/\s+/g, '') === cleanPlate);
+      if (recentLocal && (Date.now() - recentLocal.id < 2 * 60 * 1000)) {
+        showToast(`Gagal: Kendaraan ${plate} baru saja masuk (Tunggu 2 menit jika ini entry baru).`, true);
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      const entry = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString('id-ID'),
+        timeIn: getTimestamp(),
+        fullTimeIn: new Date().toISOString(),
+        plate, driver, company, simtype: simEl.value,
+        ktp, driverCard, vtype: vtypeEl.value, dest: destEl.value,
+        annotations, approver, shipments, products, details,
+        post: 'Post 7'
+      };
+
+      const logs = getLogs();
+      logs.push(entry);
+      saveLogs(logs);
+      saveVehicleCache(entry);
+      sendToGoogleSheets(entry);
+      renderLog();
+      resetForm();
+      showToast(`Entry logged: ${plate}`);
+    }
+
+    function highlight(id, msg) {
+      const el = document.getElementById(id);
+      el.style.borderColor = 'var(--error)';
+      el.focus();
+      setTimeout(() => { el.style.borderColor = ''; }, 2000);
+      showToast(msg, true);
+    }
+
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast');
+      t.className = 'toast show' + (isError ? ' error' : '');
+      document.getElementById('toast-icon').textContent = isError ? 'error' : 'check_circle';
+      document.getElementById('toast-msg').textContent = msg;
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    function resetForm() {
+      document.getElementById('plate').value = '';
+      document.getElementById('driver').value = '';
+      document.getElementById('company').value = '';
+      document.getElementById('ktp').value = '';
+      document.getElementById('driver-card').value = '';
+      document.getElementById('approver').value = '';
+      document.getElementById('products').value = '';
+      document.getElementById('details').value = '';
+      document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(r => r.checked = false);
+    }
+
+    // --- SHEET SYNC ---
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzA0bnmodgJp1Ai9-JUw3ktarL7jivZgCuLCAgHDQQxRcpxrONJiWit2frc8MPk6Eg/exec';
+    async function sendToGoogleSheets(entry) {
+      document.getElementById('sync-status').textContent = 'Syncing...';
+      try {
+        const res = await fetch(SHEET_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'addEntry', data: entry })
+        });
+        const json = await res.json();
+        if (json.status === 'ok') {
+          document.getElementById('sync-status').textContent = 'Synced ✓';
+        } else {
+          console.error('Sync error:', json.message);
+          document.getElementById('sync-status').textContent = 'Sync Error: ' + (json.message || 'Unknown');
+        }
+        setTimeout(() => document.getElementById('sync-status').textContent = 'Ready for Entry', 3000);
+      } catch (err) {
+        console.error('Network error:', err);
+        document.getElementById('sync-status').textContent = 'Saved Locally (offline)';
+      }
+    }
+
+    // --- PWA SERVICE WORKER ---
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+          console.log('SW registered: ', reg.scope);
+        }).catch(err => {
+          console.log('SW registration failed: ', err);
+        });
+      });
+    }
+
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+</script>
+</body>
+
+</html>

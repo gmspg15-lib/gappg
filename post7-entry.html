@@ -1244,10 +1244,14 @@
       logs.push(entry);
       saveLogs(logs);
       saveVehicleCache(entry);
-      sendToGoogleSheets(entry);
-      renderLog();
-      resetForm();
-      showToast(`Entry logged: ${plate}`);
+      try {
+        await sendToGoogleSheets(entry);
+      } finally {
+        renderLog();
+        resetForm();
+        showToast(`Entry logged: ${plate}`);
+        if (btn) btn.disabled = false;
+      }
     }
 
     function highlight(id, msg) {

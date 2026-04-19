@@ -22,19 +22,21 @@ var COLUMNS = [
   'SIM Type',       // 6: G
   'Driver',         // 7: H
   'ID Number',      // 8: I
-  'License Plate',  // 9: J
-  'Company',        // 10: K
-  'Vehicle Type',   // 11: L
-  'Destination',    // 12: M
-  'Products',       // 13: N
-  'Details',        // 14: O
-  'Shipments',      // 15: P
-  'Annotations',    // 16: Q
-  'Approver',       // 17: R
-  'Post In',        // 18: S
-  'Post Out',       // 19: T
-  'Status',         // 20: U
-  'Duration'        // 21: V
+  'Helper',         // 9: J
+  'Helper ID',      // 10: K
+  'License Plate',  // 11: L
+  'Company',        // 12: M
+  'Vehicle Type',   // 13: N
+  'Destination',    // 14: O
+  'Products',       // 15: P
+  'Details',        // 16: Q
+  'Shipments',      // 17: R
+  'Annotations',    // 18: S
+  'Approver',       // 19: T
+  'Post In',        // 20: U
+  'Post Out',       // 21: V
+  'Status',         // 22: W
+  'Duration'        // 23: X
 ];
 
 // ============================================================
@@ -111,8 +113,8 @@ function addEntry(entry) {
   // Prevent duplicate active entry
   var data = sheet.getDataRange().getValues();
   for (var i = 1; i < data.length; i++) {
-    var plate = String(data[i][9]).toUpperCase().trim();
-    var status = String(data[i][20]).toUpperCase().trim();
+    var plate = String(data[i][11]).toUpperCase().trim();
+    var status = String(data[i][22]).toUpperCase().trim();
     if (plate === String(entry.plate).toUpperCase().trim() && status === 'IN') {
       return { status: 'error', message: 'Vehicle already in' };
     }
@@ -125,28 +127,30 @@ function addEntry(entry) {
   }
 
   var row = [
-    entry.id,                 // A
-    entry.date,               // B
-    entry.timeIn,             // C
-    '',                       // D (DATE OUT)
+    entry.id,                 // A (ID)
+    entry.date,               // B (Date In)
+    entry.timeIn,             // C (Time In)
+    '',                       // D (Date Out)
     '',                       // E (Time Out)
-    entry.driverCard || '',   // F (VISITOR NUMBER)
-    entry.simtype || '',      // G (SIM TYPE)
-    entry.driver,             // H (DRIVER NAME)
-    entry.ktp || '',          // I (ID NUMBER)
-    entry.plate,              // J (License Plate)
-    entry.company,            // K (Company)
-    entry.vtype,              // L (Vehicle Type)
-    entry.dest,               // M (Destination)
-    entry.products || '',     // N (Products)
-    entry.details || '',      // O (Details)
-    entry.shipments || '',    // P (Shipments)
-    entry.annotations || '',  // Q (Annotations)
-    entry.approver || '',     // R (Approver)
-    'Post 7',                 // S (Post In)
-    '',                       // T (Post Out)
-    'IN',                     // U (Status)
-    ''                        // V (DURATION)
+    entry.driverCard || '',   // F (Visitor Number)
+    entry.simtype || '',      // G (SIM Type)
+    entry.driver,             // H (Driver)
+    entry.ktp || '',          // I (ID Number)
+    entry.helper || '',       // J (Helper)
+    entry.helperID || '',     // K (Helper ID)
+    entry.plate,              // L (License Plate)
+    entry.company,            // M (Company)
+    entry.vtype,              // N (Vehicle Type)
+    entry.dest,               // O (Destination)
+    entry.products || '',     // P (Products)
+    entry.details || '',      // Q (Details)
+    entry.shipments || '',    // R (Shipments)
+    entry.annotations || '',  // S (Annotations)
+    entry.approver || '',     // T (Approver)
+    'Post 7',                 // U (Post In)
+    '',                       // V (Post Out)
+    'IN',                     // W (Status)
+    ''                        // X (Duration)
   ];
 
   sheet.appendRow(row);
@@ -173,9 +177,9 @@ function updateExit(entry) {
       
       sheet.getRange(rowNum, 4).setValue(outDate);           // DATE OUT (col D)
       sheet.getRange(rowNum, 5).setValue(entry.timeOut);     // Time Out (col E)
-      sheet.getRange(rowNum, 20).setValue('Post 1');         // Post Out (col T)
-      sheet.getRange(rowNum, 21).setValue('OUT');            // Status (col U)
-      sheet.getRange(rowNum, 22).setValue(entry.duration);   // DURATION (col V)
+      sheet.getRange(rowNum, 22).setValue('Post 1');         // Post Out (col V)
+      sheet.getRange(rowNum, 23).setValue('OUT');            // Status (col W)
+      sheet.getRange(rowNum, 24).setValue(entry.duration);   // DURATION (col X)
 
       // Highlight the row green for completed
       sheet.getRange(rowNum, 1, 1, COLUMNS.length)
@@ -207,8 +211,8 @@ function searchPlate(plate) {
   var alreadyOut = null;
 
   for (var i = 1; i < data.length; i++) {
-    var rowPlate = String(data[i][9]).toUpperCase().trim(); // License Plate (col J, index 9)
-    var status = String(data[i][20]).toUpperCase().trim();  // Status (col U, index 20)
+    var rowPlate = String(data[i][11]).toUpperCase().trim(); // License Plate (col L, index 11)
+    var status = String(data[i][22]).toUpperCase().trim();   // Status (col W, index 22)
 
     if (rowPlate === plate.toUpperCase().trim()) {
       if (status === 'IN') {
@@ -220,21 +224,23 @@ function searchPlate(plate) {
           simtype:    data[i][6],
           driver:     data[i][7],
           ktp:        data[i][8],
-          plate:      data[i][9],
-          company:    data[i][10],
-          vtype:      data[i][11],
-          dest:       data[i][12],
-          products:   data[i][13],
-          details:    data[i][14],
-          shipments:  data[i][15],
-          annotations: data[i][16],
-          approver:   data[i][17],
+          helper:     data[i][9],
+          helperID:   data[i][10],
+          plate:      data[i][11],
+          company:    data[i][12],
+          vtype:      data[i][13],
+          dest:       data[i][14],
+          products:   data[i][15],
+          details:    data[i][16],
+          shipments:  data[i][17],
+          annotations: data[i][18],
+          approver:   data[i][19],
           fullTimeIn: makeFullTimeIn(data[i][1], data[i][2])
         };
         break;
       } else if (status === 'OUT') {
         alreadyOut = {
-          plate:   data[i][9],
+          plate:   data[i][11],
           timeOut: data[i][4]
         };
       }
@@ -271,7 +277,7 @@ function getActiveEntries() {
   var active = [];
 
   for (var i = 1; i < data.length; i++) {
-    if (String(data[i][20]).toUpperCase().trim() === 'IN') {
+    if (String(data[i][22]).toUpperCase().trim() === 'IN') {
       active.push({
         id:         data[i][0],
         date:       data[i][1],
@@ -280,10 +286,12 @@ function getActiveEntries() {
         simtype:    data[i][6],
         driver:     data[i][7],
         ktp:        data[i][8],
-        plate:      data[i][9],
-        company:    data[i][10],
-        vtype:      data[i][11],
-        dest:       data[i][12],
+        helper:     data[i][9],
+        helperID:   data[i][10],
+        plate:      data[i][11],
+        company:    data[i][12],
+        vtype:      data[i][13],
+        dest:       data[i][14],
         fullTimeIn: makeFullTimeIn(data[i][1], data[i][2])
       });
     }
@@ -314,8 +322,8 @@ function formatHeaderRow(sheet) {
   headerRange.setFontSize(11);
   sheet.setFrozenRows(1);
 
-  // Set column widths (length 22)
-  var widths = [120, 100, 80, 100, 80, 120, 100, 160, 140, 120, 160, 120, 140, 140, 140, 140, 140, 160, 80, 80, 80, 100];
+  // Set column widths (length 24)
+  var widths = [120, 100, 80, 100, 80, 120, 100, 160, 140, 160, 140, 120, 160, 120, 140, 140, 140, 140, 140, 160, 80, 80, 80, 100];
   for (var i = 0; i < widths.length; i++) {
     sheet.setColumnWidth(i + 1, widths[i]);
   }
@@ -335,8 +343,8 @@ function formatLastRow(sheet) {
     range.setBackground('#ffffff');
   }
 
-  // Highlight Status cell (col U = index 21=20 zero-based, Sheets is 1-based so 21)
-  sheet.getRange(row, 21).setBackground('#e6f4ea').setFontColor('#1a7f4b').setFontWeight('bold');
+  // Highlight Status cell (col W = index 22 zero-based, Sheets is 1-based so 23)
+  sheet.getRange(row, 23).setBackground('#e6f4ea').setFontColor('#1a7f4b').setFontWeight('bold');
 }
 
 // ============================================================

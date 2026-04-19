@@ -79,21 +79,22 @@ export async function fetchSheetData(forceRefresh = false) {
         }
       }
 
-      const annotationStr = String(row[16] || '').trim();
+      const annotationStr = String(row[18] || '').trim();
       const annotation = annotationStr === '' ? null : annotationStr;
 
       return {
         timestamp: ts,
         date: dateIn,
         hour: hour,
-        plate_number: String(row[9] || '').trim(),
+        plate_number: String(row[11] || '').trim(),
         driver_name: String(row[7] || '').trim(),
-        company: String(row[10] || '').trim(),
-        vehicle_type: String(row[11] || '').trim(),
-        destination: String(row[12] || '').trim(),
-        shipment_type: normalizeShipmentType(row[15]),
-        status: normalizeStatus(String(row[20] || '').trim()),
-        duration: String(row[21] || '').trim(),
+        helper_name: String(row[9] || '').trim(),
+        company: String(row[12] || '').trim(),
+        vehicle_type: String(row[13] || '').trim(),
+        destination: String(row[14] || '').trim(),
+        shipment_type: normalizeShipmentType(row[17]),
+        status: normalizeStatus(String(row[22] || '').trim()),
+        duration: String(row[23] || '').trim(),
         annotation: annotation,
         shift: shift,
         shift_date: shiftDate

@@ -1198,6 +1198,10 @@
         <div class="detail-value" id="r-driver">—</div>
       </div>
       <div class="detail-cell">
+        <div class="detail-label">Helper</div>
+        <div class="detail-value" id="r-helper">—</div>
+      </div>
+      <div class="detail-cell">
         <div class="detail-label">Company</div>
         <div class="detail-value" id="r-company">—</div>
       </div>
@@ -1216,6 +1220,10 @@
       <div class="detail-cell">
         <div class="detail-label">ID Number</div>
         <div class="detail-value" id="r-ktp">—</div>
+      </div>
+      <div class="detail-cell">
+        <div class="detail-label">Helper ID</div>
+        <div class="detail-value" id="r-helperid">—</div>
       </div>
     </div>
   </div>
@@ -1465,11 +1473,13 @@ function populateCard(record) {
   document.getElementById('r-timein').textContent = record.timeIn;
   document.getElementById('r-date').textContent = record.date;
   document.getElementById('r-driver').textContent = record.driver;
+  document.getElementById('r-helper').textContent = record.helper || '—';
   document.getElementById('r-company').textContent = record.company;
   document.getElementById('r-vtype').textContent = record.vtype;
   document.getElementById('r-dest').textContent = record.dest;
   document.getElementById('r-sim').textContent = record.simtype || '—';
   document.getElementById('r-ktp').textContent = record.ktp || '—';
+  document.getElementById('r-helperid').textContent = record.helperID || '—';
   document.getElementById('vehicle-card').classList.add('found');
   document.getElementById('duration-display').classList.add('show');
   document.getElementById('btn-logout').disabled = false;
@@ -1636,7 +1646,7 @@ function showToastError(msg) {
 }
 
 // ---- GOOGLE SHEETS INTEGRATION ----
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzA0bnmodgJp1Ai9-JUw3ktarL7jivZgCuLCAgHDQQxRcpxrONJiWit2frc8MPk6Eg/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzu2PGoNHtENMa_U3XMfvXMcdiiiBAI2YL8eHzWbUm5K2nkshEAruJSe_m1j-CS9KEx/exec';
 
 async function searchFromServer(plate) {
   if (!SHEET_URL || SHEET_URL.includes('YOUR_GOOGLE')) return null;

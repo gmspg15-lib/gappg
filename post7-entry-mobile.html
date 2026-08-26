@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>POST 7 — VEHICLE ENTRY (MOBILE)</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pg-blue: #003da5;
+      --pg-blue-dark: #002870;
+      --pg-light-blue: #00a3e0;
+      --pg-yellow: #fedb00;
+      --pg-green: #10b981;
+      --pg-red: #ef4444;
+
+      --bg: #f4f6fa;
+      --surface: #ffffff;
+      --surface-subtle: #f8fafc;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --chip-bg: #f1f5f9;
+      --chip-text: #334155;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+      --shadow-md: 0 8px 24px rgba(0,61,165,0.08);
+
+      --safe-bottom: env(safe-area-inset-bottom, 16px);
+    }
+
+    body.dark {
+      --bg: #090d16;
+      --surface: #131b2e;
+      --surface-subtle: #1a243b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: #1e293b;
+      --chip-bg: #1e293b;
+      --chip-text: #cbd5e1;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: calc(84px + var(--safe-bottom));
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* P&G Top Accent Ribbon */
+    .top-ribbon {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--pg-blue) 0%, var(--pg-light-blue) 50%, var(--pg-yellow) 100%);
+      z-index: 1100;
+    }
+
+    /* Sticky Mobile App Bar */
+    .app-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .app-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--pg-blue) 0%, var(--pg-blue-dark) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 61, 165, 0.25);
+    }
+
+    .brand-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--pg-blue);
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    body.dark .brand-title {
+      color: #38bdf8;
+    }
+
+    .brand-sub {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .app-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--surface-subtle);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .icon-btn:active {
+      transform: scale(0.92);
+    }
+
+    /* Main Container */
+    .main-content {
+      padding: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Status & Time Bar */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sync-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--pg-green);
+      background: rgba(16, 185, 129, 0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+    }
+
+    .sync-badge.syncing {
+      color: var(--pg-light-blue);
+      background: rgba(0, 163, 224, 0.1);
+    }
+
+    .clock-display {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--pg-blue);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    body.dark .clock-display {
+      color: #38bdf8;
+    }
+
+    /* Hero License Plate Box */
+    .plate-hero-card {
+      background: linear-gradient(145deg, var(--surface) 0%, var(--surface-subtle) 100%);
+      border: 2px solid var(--pg-blue);
+      border-radius: 16px;
+      padding: 18px 16px;
+      box-shadow: var(--shadow-md);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body.dark .plate-hero-card {
+      border-color: #0284c7;
+    }
+
+    .plate-hero-label {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--pg-blue);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    body.dark .plate-hero-label {
+      color: #38bdf8;
+    }
+
+    .plate-input-wrapper {
+      background: #0f172a;
+      border: 3px solid #334155;
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .plate-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.85rem;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    .plate-input::placeholder {
+      color: #475569;
+    }
+
+    /* Mobile Form Section Cards */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    .card-header-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(0, 61, 165, 0.08);
+      color: var(--pg-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    body.dark .card-header-icon {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+    }
+
+    .card-header-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-main);
+      letter-spacing: 0.5px;
+    }
+
+    /* Input Field Styling */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .field-input {
+      width: 100%;
+      height: 48px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border-color);
+      background: var(--surface-subtle);
+      color: var(--text-main);
+      padding: 0 14px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .field-input:focus {
+      border-color: var(--pg-blue);
+      background: var(--surface);
+      box-shadow: 0 0 0 3px rgba(0, 61, 165, 0.12);
+    }
+
+    /* Touch Pill Selector Grid */
+    .pill-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill-item {
+      position: relative;
+    }
+
+    .pill-input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .pill-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      min-height: 44px;
+      border-radius: 10px;
+      background: var(--chip-bg);
+      color: var(--chip-text);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      user-select: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pill-input:checked + .pill-label {
+      background: var(--pg-blue);
+      color: #ffffff;
+      border-color: var(--pg-blue);
+      box-shadow: 0 4px 12px rgba(0, 61, 165, 0.25);
+      transform: translateY(-1px);
+    }
+
+    body.dark .pill-input:checked + .pill-label {
+      background: #0284c7;
+      border-color: #38bdf8;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+    }
+
+    /* Warning Pill Theme */
+    .pill-item.warn .pill-input:checked + .pill-label {
+      background: #eab308;
+      color: #000000;
+      border-color: #facc15;
+    }
+
+    /* Fixed Bottom Action Bar */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border-color);
+      padding: 12px 16px calc(12px + var(--safe-bottom));
+      z-index: 1050;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    }
+
+    .btn-submit {
+      flex: 1;
+      height: 52px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, var(--pg-blue) 0%, var(--pg-blue-dark) 100%);
+      color: #ffffff;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0, 61, 165, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary-action {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      border: 1.5px solid var(--border-color);
+      background: var(--surface-subtle);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Slide-Up Bottom Sheet Log Drawer */
+    .sheet-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1150;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .sheet-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .bottom-sheet {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      max-height: 80vh;
+      background: var(--surface);
+      border-radius: 24px 24px 0 0;
+      z-index: 1200;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
+    }
+
+    .bottom-sheet.show {
+      transform: translateY(0);
+    }
+
+    .sheet-handle {
+      width: 40px;
+      height: 5px;
+      background: var(--border-color);
+      border-radius: 3px;
+      margin: 12px auto 8px;
+    }
+
+    .sheet-header {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sheet-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--pg-blue);
+      text-transform: uppercase;
+    }
+    body.dark .sheet-title {
+      color: #38bdf8;
+    }
+
+    .sheet-content {
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .log-item-mobile {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .log-plate-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--pg-blue);
+    }
+    body.dark .log-plate-tag {
+      color: #38bdf8;
+    }
+
+    .log-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* Toast Alert */
+    .toast-mobile {
+      position: fixed;
+      top: 65px;
+      left: 16px;
+      right: 16px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 14px 18px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      z-index: 1300;
+      transform: translateY(-120%);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast-mobile.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast-mobile.error {
+      background: #7f1d1d;
+      border: 1px solid #f87171;
+    }
+
+    .toast-icon {
+      color: var(--pg-green);
+    }
+
+    .toast-mobile.error .toast-icon {
+      color: #f87171;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Accent Ribbon -->
+  <div class="top-ribbon"></div>
+
+  <!-- Sticky App Bar -->
+  <header class="app-bar">
+    <div class="app-brand">
+      <a href="index.html" style="text-decoration:none; color:inherit;">
+        <div class="brand-icon">
+          <span class="material-symbols-outlined" style="font-size:22px">arrow_back</span>
+        </div>
+      </a>
+      <div>
+        <div class="brand-title">POST 7 ENTRY</div>
+        <div class="brand-sub">Mobile Terminal</div>
+      </div>
+    </div>
+    <div class="app-actions">
+      <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+        <span class="material-symbols-outlined" id="theme-icon" style="font-size:20px">dark_mode</span>
+      </button>
+      <button class="icon-btn" onclick="openLogSheet()" title="Log History">
+        <span class="material-symbols-outlined" style="font-size:20px">history</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Scrollable Body -->
+  <main class="main-content">
+
+    <!-- Status & Clock Bar -->
+    <div class="status-bar">
+      <div class="sync-badge" id="sync-status-badge">
+        <span class="material-symbols-outlined" style="font-size:14px">wifi</span>
+        <span id="sync-status">Ready for Entry</span>
+      </div>
+      <div class="clock-display" id="clock-mobile">--:--:--</div>
+    </div>
+
+    <!-- License Plate Hero Input -->
+    <section class="plate-hero-card">
+      <div class="plate-hero-label">
+        <span class="material-symbols-outlined" style="font-size:16px">pin</span>
+        License Plate Number
+      </div>
+      <div class="plate-input-wrapper">
+        <input type="text" id="plate" class="plate-input" placeholder="B 1234 ABC" autocomplete="off" maxlength="12" oninput="this.value = this.value.toUpperCase();">
+      </div>
+    </section>
+
+    <!-- SECTION 1: Driver & Identity -->
+    <section class="form-card">
+      <div class="card-header">
+        <div class="card-header-icon">
+          <span class="material-symbols-outlined" style="font-size:20px">person</span>
+        </div>
+        <div class="card-header-title">Driver & Helper Info</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Driver Full Name *</label>
+        <input type="text" id="driver" class="field-input" placeholder="Enter driver name" autocomplete="off">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Driver ID / KTP Number *</label>
+        <input type="text" id="ktp" class="field-input" placeholder="3275XXXXXXXXXXXX" autocomplete="off">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Company / Transport Vendor *</label>
+        <input type="text" id="company" class="field-input" placeholder="e.g. DHL Logistics" autocomplete="off">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Helper Full Name (Optional)</label>
+        <input type="text" id="helper" class="field-input" placeholder="Enter helper name" autocomplete="off">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Helper ID Number (Optional)</label>
+        <input type="text" id="helper-id" class="field-input" placeholder="Helper ID number" autocomplete="off">
+      </div>
+    </section>
+
+    <!-- SECTION 2: License & Badge -->
+    <section class="form-card">
+      <div class="card-header">
+        <div class="card-header-icon">
+          <span class="material-symbols-outlined" style="font-size:20px">badge</span>
+        </div>
+        <div class="card-header-title">License & Security Card</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Identification Type (SIM) *</label>
+        <div class="pill-grid">
+          <div class="pill-item">
+            <input type="radio" name="simtype" id="sim-a" value="SIM A" class="pill-input">
+            <label for="sim-a" class="pill-label">SIM A</label>
+          </div>
+          <div class="pill-item">
+            <input type="radio" name="simtype" id="sim-b1" value="SIM B1" class="pill-input">
+            <label for="sim-b1" class="pill-label">SIM B1</label>
+          </div>
+          <div class="pill-item">
+            <input type="radio" name="simtype" id="sim-b2" value="SIM B2" class="pill-input">
+            <label for="sim-b2" class="pill-label">SIM B2</label>
+          </div>
+          <div class="pill-item">
+            <input type="radio" name="simtype" id="sim-ktp" value="KTP" class="pill-input">
+            <label for="sim-ktp" class="pill-label">KTP Only</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Driver Card / Badge No *</label>
+        <input type="text" id="driver-card" class="field-input" placeholder="e.g. DC-889021" autocomplete="off">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Document Flag / Warning</label>
+        <div class="pill-grid">
+          <div class="pill-item warn">
+            <input type="checkbox" name="annotation" id="ann-sim-exp" value="SIM EXPIRED" class="pill-input">
+            <label for="ann-sim-exp" class="pill-label">SIM EXP</label>
+          </div>
+          <div class="pill-item warn">
+            <input type="checkbox" name="annotation" id="ann-stnk-exp" value="STNK EXPIRED" class="pill-input">
+            <label for="ann-stnk-exp" class="pill-label">STNK EXP</label>
+          </div>
+          <div class="pill-item warn">
+            <input type="checkbox" name="annotation" id="ann-kir-exp" value="KIR EXPIRED" class="pill-input">
+            <label for="ann-kir-exp" class="pill-label">KIR EXP</label>
+          </div>
+          <div class="pill-item warn">
+            <input type="checkbox" name="annotation" id="ann-sim-tilang" value="SIM TILANG" class="pill-input">
+            <label for="ann-sim-tilang" class="pill-label">SIM TILANG</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Approved By (If Flagged)</label>
+        <input type="text" id="approver" class="field-input" placeholder="Approver Name" autocomplete="off">
+      </div>
+    </section>
+
+    <!-- SECTION 3: Vehicle & Cargo Destination -->
+    <section class="form-card">
+      <div class="card-header">
+        <div class="card-header-icon">
+          <span class="material-symbols-outlined" style="font-size:20px">local_shipping</span>
+        </div>
+        <div class="card-header-title">Vehicle & Cargo Destination</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Vehicle Type *</label>
+        <div class="pill-grid">
+          <div class="pill-item"><input type="radio" name="vtype" id="vt-car" value="Car" class="pill-input"><label for="vt-car" class="pill-label">Car</label></div>
+          <div class="pill-item"><input type="radio" name="vtype" id="vt-truck" value="Truck" class="pill-input"><label for="vt-truck" class="pill-label">Truck</label></div>
+          <div class="pill-item"><input type="radio" name="vtype" id="vt-cdd" value="CDD" class="pill-input"><label for="vt-cdd" class="pill-label">CDD</label></div>
+          <div class="pill-item"><input type="radio" name="vtype" id="vt-cde" value="CDE" class="pill-input"><label for="vt-cde" class="pill-label">CDE</label></div>
+          <div class="pill-item"><input type="radio" name="vtype" id="vt-wb" value="Wingbox" class="pill-input"><label for="vt-wb" class="pill-label">Wingbox</label></div>
+          <div class="pill-item"><input type="radio" name="vtype" id="vt-fuso" value="Fuso Box" class="pill-input"><label for="vt-fuso" class="pill-label">Fuso Box</label></div>
+          <div class="pill-item"><input type="radio" name="vtype" id="vt-pickup" value="Pickup" class="pill-input"><label for="vt-pickup" class="pill-label">Pickup</label></div>
+          <div class="pill-item"><input type="radio" name="vtype" id="vt-cont20" value="Cont 20" class="pill-input"><label for="vt-cont20" class="pill-label">Cont 20</label></div>
+          <div class="pill-item"><input type="radio" name="vtype" id="vt-cont40" value="Cont 40" class="pill-input"><label for="vt-cont40" class="pill-label">Cont 40</label></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Internal Destination (Multi-Select) *</label>
+        <div class="pill-grid">
+          <div class="pill-item"><input type="checkbox" name="dest" id="dt-wha" value="WH A" class="pill-input"><label for="dt-wha" class="pill-label">WH A</label></div>
+          <div class="pill-item"><input type="checkbox" name="dest" id="dt-whb" value="WH B" class="pill-input"><label for="dt-whb" class="pill-label">WH B</label></div>
+          <div class="pill-item"><input type="checkbox" name="dest" id="dt-whc" value="WH C" class="pill-input"><label for="dt-whc" class="pill-label">WH C</label></div>
+          <div class="pill-item"><input type="checkbox" name="dest" id="dt-hair" value="Hair Care" class="pill-input"><label for="dt-hair" class="pill-label">Hair Care</label></div>
+          <div class="pill-item"><input type="checkbox" name="dest" id="dt-fab" value="Fabric Care" class="pill-input"><label for="dt-fab" class="pill-label">Fabric Care</label></div>
+          <div class="pill-item"><input type="checkbox" name="dest" id="dt-ws" value="Workshop" class="pill-input"><label for="dt-ws" class="pill-label">Workshop</label></div>
+          <div class="pill-item"><input type="checkbox" name="dest" id="dt-plant" value="Plant" class="pill-input"><label for="dt-plant" class="pill-label">Plant</label></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Shipment Action *</label>
+        <div class="pill-grid">
+          <div class="pill-item"><input type="checkbox" name="shipment" id="ship-load" value="LOADING" class="pill-input"><label for="ship-load" class="pill-label">LOADING</label></div>
+          <div class="pill-item"><input type="checkbox" name="shipment" id="ship-unload" value="UNLOADING" class="pill-input"><label for="ship-unload" class="pill-label">UNLOADING</label></div>
+          <div class="pill-item"><input type="checkbox" name="shipment" id="ship-export" value="EXPORT" class="pill-input"><label for="ship-export" class="pill-label">EXPORT</label></div>
+          <div class="pill-item"><input type="checkbox" name="shipment" id="ship-import" value="IMPORT" class="pill-input"><label for="ship-import" class="pill-label">IMPORT</label></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Cargo / Products</label>
+        <input type="text" id="products" class="field-input" placeholder="e.g. Raw Materials" autocomplete="off">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Remarks / Details</label>
+        <input type="text" id="details" class="field-input" placeholder="Additional notes" autocomplete="off">
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Pinned Bottom Action Bar -->
+  <div class="bottom-bar">
+    <button class="btn-secondary-action" onclick="resetForm()" title="Reset Form">
+      <span class="material-symbols-outlined">restart_alt</span>
+    </button>
+    <button class="btn-submit" id="btn-submit" onclick="submitEntry()">
+      <span class="material-symbols-outlined">how_to_reg</span>
+      <span>SUBMIT ENTRY</span>
+    </button>
+  </div>
+
+  <!-- Slide-Up Log Drawer Sheet -->
+  <div class="sheet-overlay" id="sheet-overlay" onclick="closeLogSheet()"></div>
+  <div class="bottom-sheet" id="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Today's Mobile Entries</div>
+      <button class="icon-btn" onclick="closeLogSheet()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="sheet-content" id="sheet-log-content">
+      <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.85rem;">No entries logged yet today.</div>
+    </div>
+  </div>
+
+  <!-- Toast Alert Container -->
+  <div class="toast-mobile" id="toast-mobile">
+    <span class="material-symbols-outlined toast-icon" id="toast-icon">check_circle</span>
+    <span id="toast-msg" style="font-size:0.88rem; font-weight:600;">Message</span>
+  </div>
+
+  <script>
+    // --- CLOCK TICKER ---
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock-mobile').textContent = `${h}:${m}:${s}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // --- THEME TOGGLE ---
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      document.getElementById('theme-icon').textContent = isDark ? 'light_mode' : 'dark_mode';
+      localStorage.setItem('gate_portal_theme', isDark ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('gate_portal_theme') === 'dark') {
+      document.body.classList.add('dark');
+      document.getElementById('theme-icon').textContent = 'light_mode';
+    }
+
+    // --- LOCAL STORAGE LOGIC ---
+    const LOGS_KEY = 'gate_entry_logs_mobile';
+
+    function getLogs() {
+      try { return JSON.parse(localStorage.getItem(LOGS_KEY)) || []; } catch { return []; }
+    }
+    function saveLogs(logs) {
+      localStorage.setItem(LOGS_KEY, JSON.stringify(logs));
+    }
+
+    // --- PRELOAD ACTIVE CACHE FROM SERVER ---
+    let activeEntriesCache = [];
+    async function preloadActiveEntries() {
+      try {
+        const res = await fetch(SHEET_URL + '?action=getActiveEntries');
+        const json = await res.json();
+        if (json.status === 'ok' && Array.isArray(json.entries)) {
+          activeEntriesCache = json.entries.map(e => String(e.plate).toUpperCase().replace(/\s+/g, ''));
+        }
+      } catch (err) {
+        console.warn('Could not preload active entries:', err);
+      }
+    }
+
+    // --- LOG SHEET DRAWER ---
+    function openLogSheet() {
+      renderLogSheet();
+      document.getElementById('sheet-overlay').classList.add('show');
+      document.getElementById('bottom-sheet').classList.add('show');
+    }
+    function closeLogSheet() {
+      document.getElementById('sheet-overlay').classList.remove('show');
+      document.getElementById('bottom-sheet').classList.remove('show');
+    }
+
+    function renderLogSheet() {
+      const logs = getLogs();
+      const container = document.getElementById('sheet-log-content');
+      if (logs.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.85rem;">No entries logged yet today.</div>';
+        return;
+      }
+
+      container.innerHTML = logs.slice().reverse().map(e => `
+        <div class="log-item-mobile">
+          <div>
+            <div class="log-plate-tag">${e.plate}</div>
+            <div class="log-meta">${e.driver} • ${e.company}</div>
+            <div class="log-meta" style="font-size:0.7rem; color:var(--pg-light-blue); font-weight:600;">Dest: ${e.dest}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'Share Tech Mono',monospace; font-size:0.85rem; font-weight:700;">${e.timeIn}</div>
+            <span style="font-size:0.65rem; background:rgba(16,185,129,0.15); color:var(--pg-green); font-weight:800; padding:2px 6px; border-radius:4px;">IN</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // --- TOAST ALERT ---
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast-mobile');
+      t.className = 'toast-mobile' + (isError ? ' error' : '');
+      document.getElementById('toast-icon').textContent = isError ? 'error' : 'check_circle';
+      document.getElementById('toast-msg').textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // --- FORM RESET ---
+    function resetForm() {
+      document.getElementById('plate').value = '';
+      document.getElementById('driver').value = '';
+      document.getElementById('company').value = '';
+      document.getElementById('ktp').value = '';
+      document.getElementById('helper').value = '';
+      document.getElementById('helper-id').value = '';
+      document.getElementById('driver-card').value = '';
+      document.getElementById('approver').value = '';
+      document.getElementById('products').value = '';
+      document.getElementById('details').value = '';
+      document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(r => r.checked = false);
+    }
+
+    // --- FORM SUBMISSION ---
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzu2PGoNHtENMa_U3XMfvXMcdiiiBAI2YL8eHzWbUm5K2nkshEAruJSe_m1j-CS9KEx/exec';
+
+    async function submitEntry() {
+      const plate = document.getElementById('plate').value.trim().toUpperCase();
+      const driver = document.getElementById('driver').value.trim();
+      const company = document.getElementById('company').value.trim();
+      const ktp = document.getElementById('ktp').value.trim();
+      const helper = document.getElementById('helper').value.trim();
+      const helperID = document.getElementById('helper-id').value.trim();
+      const driverCard = document.getElementById('driver-card').value.trim();
+      const simEl = document.querySelector('input[name="simtype"]:checked');
+      const vtypeEl = document.querySelector('input[name="vtype"]:checked');
+
+      const destEls = document.querySelectorAll('input[name="dest"]:checked');
+      const destValue = Array.from(destEls).map(el => el.value).join('/');
+
+      const approver = document.getElementById('approver').value.trim();
+      const products = document.getElementById('products').value.trim();
+      const details = document.getElementById('details').value.trim();
+
+      const annotationEls = document.querySelectorAll('input[name="annotation"]:checked');
+      const annotations = Array.from(annotationEls).map(el => el.value).join(', ');
+
+      const shipmentEls = document.querySelectorAll('input[name="shipment"]:checked');
+      const shipments = Array.from(shipmentEls).map(el => el.value).join(', ');
+
+      if (!plate) return showToast('Enter License Plate', true);
+      if (!driver) return showToast('Enter Driver Name', true);
+      if (!ktp) return showToast('Enter Driver ID (KTP)', true);
+      if (!company) return showToast('Enter Company Name', true);
+      if (!simEl) return showToast('Select SIM Type', true);
+      if (!driverCard) return showToast('Enter Driver Card Badge No', true);
+      if (!vtypeEl) return showToast('Select Vehicle Type', true);
+      if (destEls.length === 0) return showToast('Select at least 1 Destination', true);
+      if (!shipments) return showToast('Select Shipment Action', true);
+
+      const btn = document.getElementById('btn-submit');
+      btn.disabled = true;
+
+      // Duplicate Check
+      const cleanPlate = plate.replace(/\s+/g, '');
+      if (activeEntriesCache.includes(cleanPlate)) {
+        showToast(`Gagal: Kendaraan ${plate} belum keluar dari Post 1!`, true);
+        btn.disabled = false;
+        return;
+      }
+
+      const recentLocal = getLogs().find(e => String(e.plate).replace(/\s+/g, '') === cleanPlate);
+      if (recentLocal && (Date.now() - recentLocal.id < 2 * 60 * 1000)) {
+        showToast(`Gagal: Kendaraan ${plate} baru saja masuk.`, true);
+        btn.disabled = false;
+        return;
+      }
+
+      const now = new Date();
+      const timeInStr = String(now.getHours()).padStart(2,'0') + ':' +
+                        String(now.getMinutes()).padStart(2,'0') + ':' +
+                        String(now.getSeconds()).padStart(2,'0');
+
+      const entry = {
+        id: Date.now(),
+        date: now.toLocaleDateString('id-ID'),
+        timeIn: timeInStr,
+        fullTimeIn: now.toISOString(),
+        plate, driver, company, simtype: simEl.value,
+        ktp, helper, helperID, driverCard, vtype: vtypeEl.value, dest: destValue,
+        annotations, approver, shipments, products, details,
+        post: 'Post 7 Mobile'
+      };
+
+      const logs = getLogs();
+      logs.push(entry);
+      saveLogs(logs);
+
+      // Submit to Google Sheets
+      document.getElementById('sync-status').textContent = 'Syncing...';
+      document.getElementById('sync-status-badge').classList.add('syncing');
+
+      try {
+        const res = await fetch(SHEET_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'addEntry', data: entry })
+        });
+        const json = await res.json();
+        if (json.status === 'ok') {
+          document.getElementById('sync-status').textContent = 'Synced ✓';
+          showToast(`Entry Logged: ${plate}`);
+        } else {
+          document.getElementById('sync-status').textContent = 'Saved Locally';
+          showToast(`Saved Locally (Server warning: ${json.message || 'Check connection'})`);
+        }
+      } catch (err) {
+        document.getElementById('sync-status').textContent = 'Offline (Saved Locally)';
+        showToast(`Entry Saved Locally: ${plate}`);
+      } finally {
+        document.getElementById('sync-status-badge').classList.remove('syncing');
+        resetForm();
+        btn.disabled = false;
+        preloadActiveEntries();
+      }
+    }
+
+    // Initialize Preload & PWA SW
+    preloadActiveEntries();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+    }
+  </script>
+</body>
+</html>

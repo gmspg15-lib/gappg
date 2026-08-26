@@ -3,11 +3,12 @@
 // Caches app shell for offline use
 // ============================================================
 
-const CACHE_NAME = 'gate-portal-v1';
+const CACHE_NAME = 'gate-portal-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './post7-entry.html',
+  './post7-entry-mobile.html',
   './post1-exit.html',
   './dashboard.html',
   './dashboard.js',

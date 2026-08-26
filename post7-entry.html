@@ -1,54 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>POST 7 — VEHICLE ENTRY</title>
+  <title>POST 7 — VEHICLE ENTRY (DESKTOP)</title>
   <link rel="manifest" href="manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-    rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary: #002975;
-      --primary-container: #003da5;
-      --secondary: #00658d;
-      --secondary-container: #41befd;
-      --tertiary: #6e5e00;
-      --tertiary-container: #c6aa00;
+      --pg-blue: #003da5;
+      --pg-blue-dark: #002870;
+      --pg-light-blue: #00a3e0;
+      --pg-yellow: #fedb00;
+      --pg-green: #10b981;
+      --pg-red: #ef4444;
 
-      --surface: #f9f9f9;
-      --surface-low: #f3f3f3;
-      --surface-lowest: #ffffff;
-
-      --on-surface: #1a1c1c;
-      --on-primary: #ffffff;
-      --outline: #747684;
-      --outline-variant: #c4c6d5;
-
-      --error: #ba1a1a;
-      --success: #1db96a;
-
-      --header-h: 56px;
-      --footer-h: 48px;
-
-      --border-radius: 4px;
-      --border-radius-lg: 8px;
+      --bg: #f4f6fa;
+      --surface: #ffffff;
+      --surface-subtle: #f8fafc;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --chip-bg: #f1f5f9;
+      --chip-text: #334155;
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
+      --shadow-md: 0 8px 24px rgba(0, 61, 165, 0.08);
     }
 
     body.dark {
-      --primary: #477cff;
-      --primary-container: #003da5;
-      --secondary: #41befd;
-      --secondary-container: #004b69;
-      --surface: #0a0c0f;
-      --surface-low: #121518;
-      --surface-lowest: #1a1e26;
-      --on-surface: #e0e3ea;
-      --outline: #6b7280;
-      --outline-variant: #252a35;
+      --bg: #090d16;
+      --surface: #131b2e;
+      --surface-subtle: #1a243b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: #1e293b;
+      --chip-bg: #1e293b;
+      --chip-text: #cbd5e1;
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
 
     * {
@@ -58,1218 +50,848 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      background-color: var(--surface);
-      color: var(--on-surface);
-      height: 100vh;
-      overflow: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
+      padding-bottom: 80px;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    /* P&G Top Ribbon */
+    .top-ribbon {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--pg-blue) 0%, var(--pg-light-blue) 50%, var(--pg-yellow) 100%);
+      z-index: 1100;
     }
 
-    .material-symbols-outlined.filled {
-      font-variation-settings: 'FILL' 1;
-    }
-
-    /* TYPOGRAPHY */
-    .text-xs {
-      font-size: 0.75rem;
-    }
-
-    .text-sm {
-      font-size: 0.875rem;
-    }
-
-    .text-base {
-      font-size: 1rem;
-    }
-
-    .text-lg {
-      font-size: 1.125rem;
-    }
-
-    .text-xl {
-      font-size: 1.25rem;
-    }
-
-    .text-2xl {
-      font-size: 1.5rem;
-    }
-
-    .text-3xl {
-      font-size: 1.875rem;
-    }
-
-    .font-bold {
-      font-weight: 700;
-    }
-
-    .font-black {
-      font-weight: 900;
-    }
-
-    .uppercase {
-      text-transform: uppercase;
-    }
-
-    .tracking-widest {
-      letter-spacing: 0.1em;
-    }
-
-    .opacity-70 {
-      opacity: 0.7;
-    }
-
-    /* LAYOUT */
-    .flex {
-      display: flex;
-    }
-
-    .flex-col {
-      flex-direction: column;
-    }
-
-    .items-center {
-      align-items: center;
-    }
-
-    .justify-between {
-      justify-content: space-between;
-    }
-
-    .justify-center {
-      justify-content: center;
-    }
-
-    .gap-1 {
-      gap: 0.25rem;
-    }
-
-    .gap-2 {
-      gap: 0.5rem;
-    }
-
-    .gap-3 {
-      gap: 0.75rem;
-    }
-
-    .gap-4 {
-      gap: 1rem;
-    }
-
-    .gap-6 {
-      gap: 1.5rem;
-    }
-
-    .flex-1 {
-      flex: 1;
-    }
-
-    .w-full {
-      width: 100%;
-    }
-
-    .h-full {
-      height: 100%;
-    }
-
-    /* HEADER */
-    header {
-      background-color: rgba(0, 61, 165, 0.95);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      color: white;
-      height: var(--header-h);
+    /* Sticky App Bar */
+    .app-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 14px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.5rem;
-      border-bottom: none;
-      z-index: 50;
-      flex-shrink: 0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-sm);
     }
 
-    body.dark header {
-      background-color: rgba(0, 61, 165, 0.85);
-      border-bottom: none;
+    .app-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .badge-post {
-      background: white;
-      color: #003da5;
-      padding: 3px 10px;
+    .brand-icon {
+      width: 42px;
+      height: 42px;
       border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.75rem;
-      letter-spacing: 0.02em;
-    }
-
-    .nav-links {
-      display: none;
-    }
-
-    @media (min-width: 768px) {
-      .nav-links {
-        display: flex;
-        gap: 2rem;
-        align-items: center;
-      }
-    }
-
-    .nav-link {
-      color: var(--outline);
-      text-decoration: none;
-      font-size: 0.8125rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-link:hover, .nav-link.active {
-      color: var(--on-surface);
-    }
-
-    .nav-link.active {
-      font-weight: 600;
-    }
-
-    /* MAIN CONTAINER */
-    main {
-      flex: 1;
-      display: flex;
-      overflow: hidden;
-    }
-
-    /* 3-COLUMN GRID */
-    .grid-container {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      padding: 2.5rem;
-      overflow-y: auto;
-    }
-
-    .column-card {
-      background: var(--surface-low);
-      border-radius: var(--border-radius-lg);
-      padding: 1.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.75rem;
-    }
-
-    .col-header {
+      background: linear-gradient(135deg, var(--pg-blue) 0%, var(--pg-blue-dark) 100%);
+      color: white;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      color: var(--primary-container);
-      font-size: 1.25rem;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(0, 61, 165, 0.25);
+    }
+
+    .brand-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--pg-blue);
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    body.dark .brand-title {
+      color: #38bdf8;
+    }
+
+    .brand-sub {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .app-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--pg-green);
+      background: rgba(16, 185, 129, 0.1);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.76rem;
       font-weight: 700;
     }
 
-    /* INPUTS & FIELDS */
-    .field-group {
+    .status-badge.syncing {
+      color: var(--pg-light-blue);
+      background: rgba(0, 163, 224, 0.1);
+    }
+
+    .clock-box {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--pg-blue);
+      font-size: 1rem;
+      font-weight: 700;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 10px;
+    }
+    body.dark .clock-box {
+      color: #38bdf8;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: var(--surface-subtle);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .icon-btn:hover {
+      transform: scale(1.05);
+      border-color: var(--pg-blue);
+    }
+
+    /* Main Container */
+    .main-layout {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+      width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 24px;
     }
 
-    .field-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--outline);
-    }
-
-    input[type="text"] {
-      width: 100%;
-      height: 2.5rem;
-      background: var(--surface-lowest);
-      border: 1px solid var(--outline-variant);
-      color: var(--on-surface);
-      padding: 0 1rem;
-      border-radius: var(--border-radius);
-      font-family: inherit;
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    input[type="text"]:focus {
-      border-color: var(--secondary);
-      box-shadow: 0 0 0 2px rgba(0, 101, 141, 0.2);
-    }
-
-    /* LICENSE PLATE SPECIAL */
-    .plate-row {
+    /* Hero License Plate Input Box */
+    .plate-hero-wrapper {
+      background: linear-gradient(145deg, var(--surface) 0%, var(--surface-subtle) 100%);
+      border: 2px solid var(--pg-blue);
+      border-radius: 20px;
+      padding: 20px 24px;
+      box-shadow: var(--shadow-md);
       display: flex;
-      gap: 0.5rem;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    body.dark .plate-hero-wrapper {
+      border-color: #0284c7;
+    }
+
+    .plate-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .plate-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--pg-blue);
+      text-transform: uppercase;
+    }
+    body.dark .plate-title {
+      color: #38bdf8;
+    }
+
+    .plate-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .plate-box {
+      background: #0f172a;
+      border: 3px solid #334155;
+      border-radius: 14px;
+      padding: 8px 24px;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 320px;
     }
 
     .plate-input {
-      flex: 1;
-      height: 3.5rem !important;
-      border: 2px solid var(--tertiary-container) !important;
-      font-size: 1.75rem !important;
-      font-weight: 900;
-      text-transform: uppercase;
-      text-align: center;
-      letter-spacing: 0.1em;
-    }
-
-    .plate-input:focus {
-      border-color: var(--secondary) !important;
-    }
-
-    .btn-scan {
-      background: var(--secondary-container);
-      color: #004b69;
-      /* on-secondary-container */
-      border: none;
-      padding: 0 1.5rem;
-      font-size: 1rem;
-      border-radius: var(--border-radius);
-      font-weight: 700;
-      text-transform: uppercase;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: opacity 0.2s;
-    }
-
-    .btn-scan:hover {
-      opacity: 0.9;
-    }
-
-    /* CHIP SELECTORS */
-    .chip-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.375rem;
-    }
-
-    .chip-input {
-      display: none;
-    }
-
-    .chip-label {
-      background: var(--surface-lowest);
-      color: var(--outline);
-      border: 1px solid var(--outline-variant);
-      padding: 0.375rem 0.75rem;
-      font-size: 0.6875rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s;
-      user-select: none;
-    }
-
-    .chip-label:hover {
-      border-color: var(--secondary);
-      background: rgba(0, 101, 141, 0.05);
-    }
-
-    .chip-input:checked+.chip-label {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-
-    /* CAMERA WRAPPER */
-    .camera-wrapper {
-      position: relative;
-      aspect-ratio: 16 / 9;
-      background: #000;
-      border-radius: 4px;
-      overflow: hidden;
-      margin-top: 1rem;
-      border-top: 1px solid var(--outline-variant);
-    }
-
-    .camera-wrapper img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.8;
-    }
-
-    .cam-status {
-      position: absolute;
-      top: 0.5rem;
-      left: 0.5rem;
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      font-size: 0.625rem;
-      padding: 2px 6px;
-      border-radius: 2px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .dot-rec {
-      width: 8px;
-      height: 8px;
-      background: red;
-      border-radius: 50%;
-    }
-
-    /* SYSTEM NOTE */
-    .sys-note {
-      background: rgba(198, 170, 0, 0.1);
-      border-left: 4px solid var(--tertiary-container);
-      padding: 0.75rem;
-      border-radius: 0 4px 4px 0;
-      margin-top: 1rem;
-    }
-
-    .sys-title {
-      color: var(--tertiary-container);
-      font-size: 0.625rem;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 2.2rem;
       font-weight: 700;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-bottom: 4px;
-    }
-
-    .sys-text {
-      color: var(--on-surface);
-      font-size: 0.6875rem;
-      line-height: 1.4;
-    }
-
-    /* GATE STATUS CARDS */
-    .status-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin-top: auto;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(196, 198, 213, 0.2);
-    }
-
-    .status-card {
-      background: var(--surface-lowest);
-      border: 2px solid rgba(0, 101, 141, 0.2);
-      padding: 1rem;
       text-align: center;
-      border-radius: 4px;
-    }
-
-    .status-card .icon {
-      color: var(--secondary);
-      font-size: 1.875rem;
-      margin-bottom: 4px;
-    }
-
-    .status-title {
-      font-size: 0.625rem;
-      font-weight: 800;
       text-transform: uppercase;
-      color: var(--secondary);
+      letter-spacing: 4px;
     }
 
-    .status-val {
-      font-size: 0.875rem;
-      font-weight: 900;
-      color: var(--on-surface);
-      margin-top: 2px;
+    .plate-input::placeholder {
+      color: #475569;
     }
 
-    /* LOG DRAWER */
-    .log-drawer {
-      width: 320px;
-      background: var(--surface-lowest);
-      border-left: 1px solid var(--outline-variant);
+    /* 3 Column Desktop Grid */
+    .grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 1100px) {
+      .grid-3col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      transition: transform 0.3s;
-      flex-shrink: 0;
+      gap: 18px;
     }
 
-    .log-drawer.closed {
-      transform: translateX(100%);
-      margin-right: -320px;
-    }
-
-    .log-header {
-      padding: 1rem;
-      border-bottom: 1px solid var(--outline-variant);
+    .card-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed var(--border-color);
     }
 
-    .log-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .log-item {
-      background: var(--surface-lowest);
-      padding: 0.75rem;
-      border-radius: 4px;
-      border: 1px solid var(--outline-variant);
-      display: flex;
-      gap: 0.75rem;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    }
-
-    .log-icon {
-      width: 2rem;
-      height: 2rem;
-      background: rgba(0, 101, 141, 0.1);
-      color: var(--secondary);
-      border-radius: 4px;
+    .card-header-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(0, 61, 165, 0.08);
+      color: var(--pg-blue);
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
     }
 
-    .log-content {
-      flex: 1;
-      min-width: 0;
+    body.dark .card-header-icon {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
     }
 
-    .log-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-
-    .log-plate {
-      font-size: 0.625rem;
-      font-weight: 900;
+    .card-header-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
       text-transform: uppercase;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      color: var(--text-main);
+      letter-spacing: 0.5px;
     }
 
-    .log-time {
-      font-size: 0.5rem;
-      color: var(--outline);
+    /* Form Fields */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .log-desc {
-      font-size: 0.5625rem;
-      color: var(--outline);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin: 2px 0;
-    }
-
-    .log-pill {
-      display: inline-flex;
-      background: rgba(0, 101, 141, 0.1);
-      color: var(--secondary);
-      font-size: 0.5rem;
+    .field-label {
+      font-size: 0.78rem;
       font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 999px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    .log-footer {
-      padding: 1rem;
-      border-top: 1px solid var(--outline-variant);
+    .field-input {
+      width: 100%;
+      height: 46px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border-color);
+      background: var(--surface-subtle);
+      color: var(--text-main);
+      padding: 0 14px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      outline: none;
+      transition: all 0.2s ease;
     }
 
-    /* STATUS DOT */
-    .pulse-dot {
-      width: 10px;
-      height: 10px;
-      background: var(--success);
-      border-radius: 50%;
-      animation: pulse 2s infinite;
+    .field-input:focus {
+      border-color: var(--pg-blue);
+      background: var(--surface);
+      box-shadow: 0 0 0 3px rgba(0, 61, 165, 0.12);
     }
 
-    @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0.5;
-      }
+    /* Touch Pill Selector Grid */
+    .pill-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    /* FOOTER / ACTION BAR */
-    footer {
-      height: var(--footer-h);
-      background: var(--surface-lowest);
-      border-top: 1px solid var(--outline-variant);
+    .pill-item {
+      position: relative;
+    }
+
+    .pill-input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .pill-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      min-height: 40px;
+      border-radius: 10px;
+      background: var(--chip-bg);
+      color: var(--chip-text);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .pill-input:checked + .pill-label {
+      background: var(--pg-blue);
+      color: #ffffff;
+      border-color: var(--pg-blue);
+      box-shadow: 0 4px 12px rgba(0, 61, 165, 0.25);
+    }
+
+    body.dark .pill-input:checked + .pill-label {
+      background: #0284c7;
+      border-color: #38bdf8;
+    }
+
+    .pill-item.warn .pill-input:checked + .pill-label {
+      background: #eab308;
+      color: #000000;
+      border-color: #facc15;
+    }
+
+    /* Fixed Bottom Action Bar */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border-color);
+      padding: 14px 24px;
+      z-index: 1050;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 1.5rem;
-      box-shadow: 0 -4px 20px rgba(0, 41, 117, 0.08);
-      z-index: 50;
+      justify-content: flex-end;
+      gap: 16px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
     }
 
-    .btn-action {
-      height: 2rem;
-      padding: 0 1rem;
-      font-size: 0.625rem;
-      font-weight: 700;
+    .btn-submit {
+      height: 48px;
+      padding: 0 32px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, var(--pg-blue) 0%, var(--pg-blue-dark) 100%);
+      color: #ffffff;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
       text-transform: uppercase;
-      border-radius: 2px;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0, 61, 165, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 61, 165, 0.35);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-reset {
+      height: 48px;
+      padding: 0 20px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border-color);
+      background: var(--surface-subtle);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      border: 1px solid transparent;
-      transition: all 0.2s;
+      gap: 8px;
     }
 
-    .btn-log {
-      color: var(--outline);
-    }
-
-    .btn-log:hover {
-      background: var(--surface-low);
-    }
-
-    .badge-count {
-      background: var(--primary-container);
-      color: white;
-      padding: 2px 6px;
-      border-radius: 999px;
-      font-size: 0.5rem;
-    }
-
-    .btn-clear {
-      border-color: var(--outline-variant);
-      color: var(--outline);
-    }
-
-    .btn-clear:hover {
-      background: var(--surface-low);
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-      padding: 0 2rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-container);
-    }
-
-    .btn-primary:active {
-      transform: scale(0.98);
-    }
-
-    /* TOAST */
-    .toast {
+    /* Side Drawer for Logs */
+    .drawer-overlay {
       position: fixed;
-      top: 1.5rem;
-      right: 1.5rem;
-      background: rgba(29, 185, 106, 0.1);
-      border: 1px solid var(--success);
-      color: var(--success);
-      padding: 0.75rem 1.25rem;
-      border-radius: 4px;
-      font-weight: 700;
-      font-size: 0.875rem;
-      display: none;
-      align-items: center;
-      gap: 0.5rem;
-      z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      animation: slideIn 0.3s forwards;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1150;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
     }
 
-    .toast.show {
+    .drawer-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .side-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 420px;
+      max-width: 90vw;
+      background: var(--surface);
+      z-index: 1200;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
+      flex-direction: column;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.15);
     }
 
-    .toast.error {
-      background: rgba(186, 26, 26, 0.1);
-      border-color: var(--error);
-      color: var(--error);
+    .side-drawer.show {
+      transform: translateX(0);
     }
 
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
+    .drawer-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    @media (max-width: 1024px) {
-      .grid-container {
-        grid-template-columns: 1fr;
-      }
+    .drawer-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--pg-blue);
+      text-transform: uppercase;
+    }
+    body.dark .drawer-title {
+      color: #38bdf8;
+    }
 
-      .log-drawer {
-        position: fixed;
-        right: 0;
-        top: var(--header-h);
-        bottom: var(--footer-h);
-        z-index: 40;
-      }
+    .drawer-content {
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .log-card-desktop {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .log-plate {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--pg-blue);
+    }
+    body.dark .log-plate {
+      color: #38bdf8;
+    }
+
+    /* Toast Alert */
+    .toast-alert {
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 14px 20px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 1300;
+      transform: translateX(120%);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast-alert.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .toast-alert.error {
+      background: #7f1d1d;
+      border: 1px solid #f87171;
     }
   </style>
 </head>
-
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <div class="flex items-center gap-4">
-      <div class="badge-post">POST 7</div>
-      <div class="flex flex-col">
-        <h1 style="font-size:1.125rem; font-weight:600; letter-spacing:-0.015em; line-height:1.2">VEHICLE ENTRY</h1>
-        <span style="font-size:0.65rem; font-weight:500; text-transform:uppercase; letter-spacing:0.05em; opacity:0.8">Gate Access Control System</span>
+  <!-- Top Ribbon -->
+  <div class="top-ribbon"></div>
+
+  <!-- Sticky Header -->
+  <header class="app-bar">
+    <div class="app-brand">
+      <a href="index.html" style="text-decoration:none; color:inherit;">
+        <div class="brand-icon">
+          <span class="material-symbols-outlined" style="font-size:24px">arrow_back</span>
+        </div>
+      </a>
+      <div>
+        <div class="brand-title">POST 7 ENTRY</div>
+        <div class="brand-sub">Desktop Gate Terminal</div>
       </div>
     </div>
 
-    <div class="flex items-center gap-6">
-      <div class="text-right hidden sm:block">
-        <div id="clock" style="font-size:0.875rem; font-weight:600; letter-spacing:0.02em; line-height:1.2">--:--:--</div>
-        <div id="clock-date" style="font-size:0.65rem; font-weight:500; text-transform:uppercase; letter-spacing:0.05em; opacity:0.8">---</div>
+    <div class="app-controls">
+      <div class="status-badge" id="sync-status-badge">
+        <span class="material-symbols-outlined" style="font-size:16px">wifi</span>
+        <span id="sync-status">Ready for Entry</span>
       </div>
-      <div class="flex items-center gap-3">
-        <span class="material-symbols-outlined text-xl cursor-pointer" onclick="toggleTheme()"
-          title="Toggle Theme">light_mode</span>
-      </div>
+      <div class="clock-box" id="clock-desktop">--:--:--</div>
+      <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+        <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
+      </button>
+      <button class="icon-btn" onclick="openDrawer()" title="View Entry Logs">
+        <span class="material-symbols-outlined">history</span>
+      </button>
     </div>
   </header>
 
-  <!-- MAIN -->
-  <main>
-    <div class="grid-container">
-      <!-- COL 1: Identity -->
-      <div class="column-card">
-        <div class="col-header">
-          <span class="material-symbols-outlined">badge</span>
-          License Plate & Driver
-        </div>
+  <!-- Main Grid Layout -->
+  <main class="main-layout">
 
-        <div class="field-group">
-          <label class="field-label">License Plate Number</label>
-          <div class="plate-row">
-            <input type="text" id="plate" class="plate-input" placeholder="B 1234 ABC" autocomplete="off"
-              maxlength="12">
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label class="field-label">Driver Full Name</label>
-          <input type="text" id="driver" placeholder="Enter full name" autocomplete="off">
-        </div>
-
-        <div class="field-group">
-          <label class="field-label">ID Number (Driver)</label>
-          <input type="text" id="ktp" placeholder="3275XXXXXXXXXXXX" autocomplete="off">
-        </div>
-
-        <div class="field-group">
-          <label class="field-label">Helper Full Name</label>
-          <input type="text" id="helper" placeholder="Enter helper name (if any)" autocomplete="off">
-        </div>
-
-        <div class="field-group">
-          <label class="field-label">ID Number (Helper)</label>
-          <input type="text" id="helper-id" placeholder="Helper ID number" autocomplete="off">
-        </div>
-
-        <div class="field-group">
-          <label class="field-label">Company / Vendor</label>
-          <input type="text" id="company" placeholder="e.g. DHL Logistics" autocomplete="off">
-        </div>
+    <!-- Hero License Plate Box -->
+    <div class="plate-hero-wrapper">
+      <div class="plate-info">
+        <div class="plate-title">Vehicle Registration</div>
+        <div class="plate-sub">Enter official license plate number to initiate gate entry</div>
       </div>
-
-      <!-- COL 2: License & ID -->
-      <div class="column-card">
-        <div class="col-header">
-          <span class="material-symbols-outlined">identity_platform</span>
-          License & ID
-        </div>
-
-        <div class="field-group" style="margin-bottom:0.5rem">
-          <label class="field-label">Identification Type (SIM)</label>
-          <div class="chip-group">
-            <input type="radio" name="simtype" id="sim-a" value="SIM A" class="chip-input">
-            <label for="sim-a" class="chip-label">SIM A</label>
-            <input type="radio" name="simtype" id="sim-b1" value="SIM B1" class="chip-input">
-            <label for="sim-b1" class="chip-label">SIM B1</label>
-            <input type="radio" name="simtype" id="sim-b2" value="SIM B2" class="chip-input">
-            <label for="sim-b2" class="chip-label">SIM B2</label>
-            <input type="radio" name="simtype" id="sim-ktp" value="KTP" class="chip-input">
-            <label for="sim-ktp" class="chip-label">KTP</label>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label class="field-label">Driver Card No (System ID)</label>
-          <input type="text" id="driver-card" placeholder="DC-889021" autocomplete="off">
-        </div>
-
-        <div class="field-group" style="margin-bottom:0.5rem;margin-top:0.5rem">
-          <label class="field-label">Annotation (Invalid Document)</label>
-          <div class="chip-group">
-            <input type="checkbox" name="annotation" id="ann-sim-exp" value="SIM EXPIRED" class="chip-input">
-            <label for="ann-sim-exp" class="chip-label">SIM EXP</label>
-            <input type="checkbox" name="annotation" id="ann-stnk-exp" value="STNK EXPIRED" class="chip-input">
-            <label for="ann-stnk-exp" class="chip-label">STNK EXP</label>
-            <input type="checkbox" name="annotation" id="ann-kir-exp" value="KIR EXPIRED" class="chip-input">
-            <label for="ann-kir-exp" class="chip-label">KIR EXP</label>
-            <input type="checkbox" name="annotation" id="ann-sim-tilang" value="SIM TILANG" class="chip-input">
-            <label for="ann-sim-tilang" class="chip-label">SIM TILANG</label>
-            <input type="checkbox" name="annotation" id="ann-stnk-tilang" value="STNK TILANG" class="chip-input">
-            <label for="ann-stnk-tilang" class="chip-label">STNK TILANG</label>
-            <input type="checkbox" name="annotation" id="ann-kir-tilang" value="KIR TILANG" class="chip-input">
-            <label for="ann-kir-tilang" class="chip-label">KIR TILANG</label>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label class="field-label">Approved By (If Invalid)</label>
-          <input type="text" id="approver" placeholder="Approver Name" autocomplete="off">
-        </div>
-
-        <div class="sys-note">
-          <div class="sys-title"><span class="material-symbols-outlined" style="font-size:14px">warning</span> System
-            Note</div>
-          <div class="sys-text">Driver database connection ready. Ensure ID matches physical card.</div>
-        </div>
-      </div>
-
-      <!-- COL 3: Vehicle -->
-      <div class="column-card">
-        <div class="col-header">
-          <span class="material-symbols-outlined">local_shipping</span>
-          Vehicle & Destination
-        </div>
-
-        <div class="field-group" style="margin-bottom:0.5rem">
-          <label class="field-label">Vehicle Type</label>
-          <div class="chip-group">
-            <input type="radio" name="vtype" id="vt-car" value="Car" class="chip-input">
-            <label for="vt-car" class="chip-label">Car</label>
-            <input type="radio" name="vtype" id="vt-truck" value="Truck" class="chip-input">
-            <label for="vt-truck" class="chip-label">Truck</label>
-            <input type="radio" name="vtype" id="vt-cdd" value="CDD" class="chip-input">
-            <label for="vt-cdd" class="chip-label">CDD</label>
-            <input type="radio" name="vtype" id="vt-cde" value="CDE" class="chip-input">
-            <label for="vt-cde" class="chip-label">CDE</label>
-            <input type="radio" name="vtype" id="vt-wb" value="Wingbox" class="chip-input">
-            <label for="vt-wb" class="chip-label">Wingbox</label>
-            <input type="radio" name="vtype" id="vt-fuso" value="Fuso Box" class="chip-input">
-            <label for="vt-fuso" class="chip-label">Fuso Box</label>
-            <input type="radio" name="vtype" id="vt-iso" value="Isotank" class="chip-input">
-            <label for="vt-iso" class="chip-label">Isotank</label>
-            <input type="radio" name="vtype" id="vt-pickup" value="Pickup" class="chip-input">
-            <label for="vt-pickup" class="chip-label">Pickup</label>
-            <input type="radio" name="vtype" id="vt-cont20" value="Cont 20" class="chip-input">
-            <label for="vt-cont20" class="chip-label">Cont 20</label>
-            <input type="radio" name="vtype" id="vt-cont40" value="Cont 40" class="chip-input">
-            <label for="vt-cont40" class="chip-label">Cont 40</label>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label class="field-label">Internal Destination</label>
-          <div class="chip-group">
-            <input type="checkbox" name="dest" id="dt-wha" value="WH A" class="chip-input">
-            <label for="dt-wha" class="chip-label">WH A</label>
-            <input type="checkbox" name="dest" id="dt-whb" value="WH B" class="chip-input">
-            <label for="dt-whb" class="chip-label">WH B</label>
-            <input type="checkbox" name="dest" id="dt-whc" value="WH C" class="chip-input">
-            <label for="dt-whc" class="chip-label">WH C</label>
-            <input type="checkbox" name="dest" id="dt-hair" value="Hair Care" class="chip-input">
-            <label for="dt-hair" class="chip-label">Hair Care</label>
-            <input type="checkbox" name="dest" id="dt-fab" value="Fabric Care" class="chip-input">
-            <label for="dt-fab" class="chip-label">Fabric Care</label>
-            <input type="checkbox" name="dest" id="dt-ws" value="Workshop" class="chip-input">
-            <label for="dt-ws" class="chip-label">Workshop</label>
-            <input type="checkbox" name="dest" id="dt-plant" value="Plant" class="chip-input">
-            <label for="dt-plant" class="chip-label">Plant</label>
-          </div>
-        </div>
-
-        <div class="field-group" style="margin-bottom:0.5rem">
-          <label class="field-label">Shipment Status</label>
-          <div class="chip-group">
-            <input type="checkbox" name="shipment" id="ship-load" value="LOADING" class="chip-input">
-            <label for="ship-load" class="chip-label">LOADING</label>
-            <input type="checkbox" name="shipment" id="ship-unload" value="UNLOADING" class="chip-input">
-            <label for="ship-unload" class="chip-label">UNLOADING</label>
-            <input type="checkbox" name="shipment" id="ship-export" value="EXPORT" class="chip-input">
-            <label for="ship-export" class="chip-label">EXPORT</label>
-            <input type="checkbox" name="shipment" id="ship-import" value="IMPORT" class="chip-input">
-            <label for="ship-import" class="chip-label">IMPORT</label>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label class="field-label">Products (To be unloaded)</label>
-          <input type="text" id="products" placeholder="e.g. Raw Materials" autocomplete="off">
-        </div>
-
-        <div class="field-group">
-          <label class="field-label">Details / Remarks</label>
-          <input type="text" id="details" placeholder="Additional info" autocomplete="off">
-        </div>
+      <div class="plate-box">
+        <input type="text" id="plate" class="plate-input" placeholder="B 1234 ABC" autocomplete="off" maxlength="12" oninput="this.value = this.value.toUpperCase();">
       </div>
     </div>
 
-    <!-- LOG DRAWER -->
-    <aside class="log-drawer" id="log-drawer">
-      <div class="log-header">
-        <div>
-          <h3
-            style="color:var(--primary-container);font-weight:700;font-size:0.625rem;text-transform:uppercase;letter-spacing:0.1em">
-            System Logs</h3>
-          <p style="font-size:0.5625rem;color:var(--outline);text-transform:uppercase">Today's Activity</p>
+    <!-- 3 Column Form Layout -->
+    <div class="grid-3col">
+
+      <!-- COL 1: Identity -->
+      <div class="form-card">
+        <div class="card-header">
+          <div class="card-header-icon">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+          <div class="card-header-title">Driver & Helper Info</div>
         </div>
-        <div style="display:flex; gap:12px; align-items:center;">
-          <button onclick="clearLocalLogs()" style="background:none;border:none;color:#e53e3e;font-size:0.625rem;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:4px">
-            <span class="material-symbols-outlined" style="font-size:14px">delete</span> Clear
-          </button>
-          <button
-            style="background:none;border:none;color:var(--primary);font-size:0.625rem;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:4px">
-            <span class="material-symbols-outlined" style="font-size:14px">download</span> Export
-          </button>
+
+        <div class="field-group">
+          <label class="field-label">Driver Full Name *</label>
+          <input type="text" id="driver" class="field-input" placeholder="Enter driver name" autocomplete="off">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Driver KTP / ID Number *</label>
+          <input type="text" id="ktp" class="field-input" placeholder="3275XXXXXXXXXXXX" autocomplete="off">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Company / Vendor *</label>
+          <input type="text" id="company" class="field-input" placeholder="e.g. DHL Logistics" autocomplete="off">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Helper Full Name (Optional)</label>
+          <input type="text" id="helper" class="field-input" placeholder="Enter helper name" autocomplete="off">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Helper ID Number (Optional)</label>
+          <input type="text" id="helper-id" class="field-input" placeholder="Helper ID number" autocomplete="off">
         </div>
       </div>
 
-      <div class="log-list" id="log-body">
-        <div style="padding:1rem;color:var(--outline);font-size:0.75rem;text-align:center">No entries yet today</div>
-      </div>
-
-      <div class="log-footer">
-        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem">
-          <div
-            style="width:2rem;height:2rem;background:var(--surface-low);display:flex;align-items:center;justify-content:center;border-radius:4px">
-            <span class="material-symbols-outlined" style="font-size:1.125rem;color:var(--outline)">hardware</span>
+      <!-- COL 2: License & Badge -->
+      <div class="form-card">
+        <div class="card-header">
+          <div class="card-header-icon">
+            <span class="material-symbols-outlined">badge</span>
           </div>
-          <div>
-            <div style="font-size:0.625rem;font-weight:700;text-transform:uppercase">Hardware Status</div>
-            <div style="font-size:0.5625rem;font-weight:700;text-transform:uppercase;color:var(--success)">All Systems
-              Nominal</div>
+          <div class="card-header-title">License & Security Card</div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Identification Type (SIM) *</label>
+          <div class="pill-grid">
+            <div class="pill-item"><input type="radio" name="simtype" id="sim-a" value="SIM A" class="pill-input"><label for="sim-a" class="pill-label">SIM A</label></div>
+            <div class="pill-item"><input type="radio" name="simtype" id="sim-b1" value="SIM B1" class="pill-input"><label for="sim-b1" class="pill-label">SIM B1</label></div>
+            <div class="pill-item"><input type="radio" name="simtype" id="sim-b2" value="SIM B2" class="pill-input"><label for="sim-b2" class="pill-label">SIM B2</label></div>
+            <div class="pill-item"><input type="radio" name="simtype" id="sim-ktp" value="KTP" class="pill-input"><label for="sim-ktp" class="pill-label">KTP Only</label></div>
           </div>
         </div>
+
+        <div class="field-group">
+          <label class="field-label">Driver Card / Badge No *</label>
+          <input type="text" id="driver-card" class="field-input" placeholder="e.g. DC-889021" autocomplete="off">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Document Issue Annotation</label>
+          <div class="pill-grid">
+            <div class="pill-item warn"><input type="checkbox" name="annotation" id="ann-sim-exp" value="SIM EXPIRED" class="pill-input"><label for="ann-sim-exp" class="pill-label">SIM EXP</label></div>
+            <div class="pill-item warn"><input type="checkbox" name="annotation" id="ann-stnk-exp" value="STNK EXPIRED" class="pill-input"><label for="ann-stnk-exp" class="pill-label">STNK EXP</label></div>
+            <div class="pill-item warn"><input type="checkbox" name="annotation" id="ann-kir-exp" value="KIR EXPIRED" class="pill-input"><label for="ann-kir-exp" class="pill-label">KIR EXP</label></div>
+            <div class="pill-item warn"><input type="checkbox" name="annotation" id="ann-sim-tilang" value="SIM TILANG" class="pill-input"><label for="ann-sim-tilang" class="pill-label">SIM TILANG</label></div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Approved By (If Flagged)</label>
+          <input type="text" id="approver" class="field-input" placeholder="Approver Name" autocomplete="off">
+        </div>
       </div>
-    </aside>
+
+      <!-- COL 3: Vehicle & Destination -->
+      <div class="form-card">
+        <div class="card-header">
+          <div class="card-header-icon">
+            <span class="material-symbols-outlined">local_shipping</span>
+          </div>
+          <div class="card-header-title">Vehicle & Cargo Destination</div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Vehicle Type *</label>
+          <div class="pill-grid">
+            <div class="pill-item"><input type="radio" name="vtype" id="vt-car" value="Car" class="pill-input"><label for="vt-car" class="pill-label">Car</label></div>
+            <div class="pill-item"><input type="radio" name="vtype" id="vt-truck" value="Truck" class="pill-input"><label for="vt-truck" class="pill-label">Truck</label></div>
+            <div class="pill-item"><input type="radio" name="vtype" id="vt-cdd" value="CDD" class="pill-input"><label for="vt-cdd" class="pill-label">CDD</label></div>
+            <div class="pill-item"><input type="radio" name="vtype" id="vt-cde" value="CDE" class="pill-input"><label for="vt-cde" class="pill-label">CDE</label></div>
+            <div class="pill-item"><input type="radio" name="vtype" id="vt-wb" value="Wingbox" class="pill-input"><label for="vt-wb" class="pill-label">Wingbox</label></div>
+            <div class="pill-item"><input type="radio" name="vtype" id="vt-fuso" value="Fuso Box" class="pill-input"><label for="vt-fuso" class="pill-label">Fuso Box</label></div>
+            <div class="pill-item"><input type="radio" name="vtype" id="vt-pickup" value="Pickup" class="pill-input"><label for="vt-pickup" class="pill-label">Pickup</label></div>
+            <div class="pill-item"><input type="radio" name="vtype" id="vt-cont20" value="Cont 20" class="pill-input"><label for="vt-cont20" class="pill-label">Cont 20</label></div>
+            <div class="pill-item"><input type="radio" name="vtype" id="vt-cont40" value="Cont 40" class="pill-input"><label for="vt-cont40" class="pill-label">Cont 40</label></div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Internal Destination (Multi-Select) *</label>
+          <div class="pill-grid">
+            <div class="pill-item"><input type="checkbox" name="dest" id="dt-wha" value="WH A" class="pill-input"><label for="dt-wha" class="pill-label">WH A</label></div>
+            <div class="pill-item"><input type="checkbox" name="dest" id="dt-whb" value="WH B" class="pill-input"><label for="dt-whb" class="pill-label">WH B</label></div>
+            <div class="pill-item"><input type="checkbox" name="dest" id="dt-whc" value="WH C" class="pill-input"><label for="dt-whc" class="pill-label">WH C</label></div>
+            <div class="pill-item"><input type="checkbox" name="dest" id="dt-hair" value="Hair Care" class="pill-input"><label for="dt-hair" class="pill-label">Hair Care</label></div>
+            <div class="pill-item"><input type="checkbox" name="dest" id="dt-fab" value="Fabric Care" class="pill-input"><label for="dt-fab" class="pill-label">Fabric Care</label></div>
+            <div class="pill-item"><input type="checkbox" name="dest" id="dt-ws" value="Workshop" class="pill-input"><label for="dt-ws" class="pill-label">Workshop</label></div>
+            <div class="pill-item"><input type="checkbox" name="dest" id="dt-plant" value="Plant" class="pill-input"><label for="dt-plant" class="pill-label">Plant</label></div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Shipment Action *</label>
+          <div class="pill-grid">
+            <div class="pill-item"><input type="checkbox" name="shipment" id="ship-load" value="LOADING" class="pill-input"><label for="ship-load" class="pill-label">LOADING</label></div>
+            <div class="pill-item"><input type="checkbox" name="shipment" id="ship-unload" value="UNLOADING" class="pill-input"><label for="ship-unload" class="pill-label">UNLOADING</label></div>
+            <div class="pill-item"><input type="checkbox" name="shipment" id="ship-export" value="EXPORT" class="pill-input"><label for="ship-export" class="pill-label">EXPORT</label></div>
+            <div class="pill-item"><input type="checkbox" name="shipment" id="ship-import" value="IMPORT" class="pill-input"><label for="ship-import" class="pill-label">IMPORT</label></div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Cargo / Products</label>
+          <input type="text" id="products" class="field-input" placeholder="e.g. Raw Materials" autocomplete="off">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Remarks / Details</label>
+          <input type="text" id="details" class="field-input" placeholder="Additional info" autocomplete="off">
+        </div>
+      </div>
+
+    </div>
   </main>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="flex items-center gap-6">
-      <div class="flex items-center gap-2">
-        <div class="pulse-dot"></div>
-        <span class="text-xs font-bold uppercase" style="color:var(--outline);letter-spacing:0.05em"
-          id="sync-status">Ready for Entry</span>
-      </div>
-      <div class="hidden sm:block">
-        <span class="text-[10px] font-bold" style="color:var(--primary)">&copy; rrfmargaret</span>
-      </div>
-    </div>
+  <!-- Pinned Bottom Bar -->
+  <div class="bottom-bar">
+    <button class="btn-reset" onclick="resetForm()">
+      <span class="material-symbols-outlined">restart_alt</span>
+      Reset Form
+    </button>
+    <button class="btn-submit" id="btn-submit" onclick="submitEntry()">
+      <span class="material-symbols-outlined">how_to_reg</span>
+      SUBMIT VEHICLE ENTRY
+    </button>
+  </div>
 
-    <div class="flex items-center gap-3">
-      <button class="btn-action btn-log" onclick="toggleLog()">
-        <span class="material-symbols-outlined" style="font-size:14px">history</span>
-        View Log
-        <span class="badge-count" id="log-count">0</span>
-      </button>
-      <div style="width:1px;height:1rem;background:var(--outline-variant);margin:0 0.5rem"></div>
-      <button class="btn-action btn-clear" onclick="resetForm()">Clear</button>
-      <button class="btn-action btn-primary" onclick="submitEntry()">
-        <span class="material-symbols-outlined" style="font-size:16px">check_circle</span>
-        Log Entry
-      </button>
+  <!-- Side Drawer Logs -->
+  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+  <div class="side-drawer" id="side-drawer">
+    <div class="drawer-header">
+      <div class="drawer-title">Today's Desktop Entries</div>
+      <button class="icon-btn" onclick="closeDrawer()"><span class="material-symbols-outlined">close</span></button>
     </div>
-  </footer>
+    <div class="drawer-content" id="drawer-log-content">
+      <div style="text-align:center; padding:20px; color:var(--text-muted);">No entries logged yet today.</div>
+    </div>
+  </div>
 
-  <!-- MODALS & OVERLAYS -->
-  <div class="toast" id="toast">
-    <span class="material-symbols-outlined" id="toast-icon">check_circle</span>
-    <span id="toast-msg">Entry logged successfully!</span>
+  <!-- Toast Alert -->
+  <div class="toast-alert" id="toast-alert">
+    <span class="material-symbols-outlined" id="toast-icon" style="color:var(--pg-green)">check_circle</span>
+    <span id="toast-msg" style="font-size:0.9rem; font-weight:600;">Message</span>
   </div>
 
   <script>
-    // --- THEME ---
-    function toggleTheme() {
-      document.body.classList.toggle('dark');
-      localStorage.setItem('gate_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-    }
-    if (localStorage.getItem('gate_theme') === 'dark') document.body.classList.add('dark');
-
-    // --- CLOCK ---
+    // Clock
     function updateClock() {
       const now = new Date();
       const h = String(now.getHours()).padStart(2, '0');
       const m = String(now.getMinutes()).padStart(2, '0');
       const s = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('clock').textContent = `${h}:${m}:${s}`;
-
-      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      document.getElementById('clock-date').textContent = `${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`.toUpperCase();
+      document.getElementById('clock-desktop').textContent = `${h}:${m}:${s}`;
     }
     setInterval(updateClock, 1000);
     updateClock();
 
-    // --- LOG UI ---
-    function toggleLog() {
-      document.getElementById('log-drawer').classList.toggle('closed');
+    // Theme Toggle
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      document.getElementById('theme-icon').textContent = isDark ? 'light_mode' : 'dark_mode';
+      localStorage.setItem('gate_portal_theme', isDark ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('gate_portal_theme') === 'dark') {
+      document.body.classList.add('dark');
+      document.getElementById('theme-icon').textContent = 'light_mode';
     }
 
-    // --- LOGIC ---
-    const systemVehicleCache = (() => {
-      try { return JSON.parse(localStorage.getItem('gate_vehicle_cache') || '{}'); } catch { return {}; }
-    })();
-
-    function saveVehicleCache(entry) {
-      const cleanPlate = String(entry.plate).toUpperCase().replace(/\s+/g, '');
-      systemVehicleCache[cleanPlate] = {
-        driver: entry.driver,
-        company: entry.company,
-        simtype: entry.simtype,
-        ktp: entry.ktp,
-        helper: entry.helper,
-        helperID: entry.helperID,
-        driverCard: entry.driverCard,
-        vtype: entry.vtype
-      };
-      localStorage.setItem('gate_vehicle_cache', JSON.stringify(systemVehicleCache));
+    // Local Storage
+    const LOGS_KEY = 'gate_entry_logs';
+    function getLogs() {
+      try { return JSON.parse(localStorage.getItem(LOGS_KEY)) || []; } catch { return []; }
+    }
+    function saveLogs(logs) {
+      localStorage.setItem(LOGS_KEY, JSON.stringify(logs));
     }
 
+    // Preload Active Entries
     let activeEntriesCache = [];
     async function preloadActiveEntries() {
-      if (!SHEET_URL) return;
       try {
-        const res = await fetch(`${SHEET_URL}?action=getActiveEntries`);
+        const res = await fetch(SHEET_URL + '?action=getActiveEntries');
         const json = await res.json();
-        if (json.status === 'ok') {
+        if (json.status === 'ok' && Array.isArray(json.entries)) {
           activeEntriesCache = json.entries.map(e => String(e.plate).toUpperCase().replace(/\s+/g, ''));
         }
-      } catch {}
-    }
-    preloadActiveEntries();
-    setInterval(preloadActiveEntries, 60000); // refresh every minute
-
-    function autofillVehicle(plateStr) {
-      const cleanInput = String(plateStr).toUpperCase().replace(/\s+/g, '');
-      if (!cleanInput || cleanInput.length < 3) return;
-      
-      let cached = systemVehicleCache[cleanInput];
-      if (!cached) {
-        // Fallback for older cache entries with spaces
-        const matchingKey = Object.keys(systemVehicleCache).find(k => String(k).toUpperCase().replace(/\s+/g, '') === cleanInput);
-        if (matchingKey) cached = systemVehicleCache[matchingKey];
-      }
-
-      if (cached) {
-        if (cached.driver) document.getElementById('driver').value = cached.driver;
-        if (cached.company) document.getElementById('company').value = cached.company;
-        if (cached.ktp) document.getElementById('ktp').value = cached.ktp;
-        if (cached.helper) document.getElementById('helper').value = cached.helper;
-        if (cached.helperID) document.getElementById('helper-id').value = cached.helperID;
-        if (cached.driverCard) document.getElementById('driver-card').value = cached.driverCard;
-        
-        if (cached.simtype) {
-           const sc = Array.from(document.querySelectorAll('input[name="simtype"]')).find(el => el.value === cached.simtype);
-           if (sc) sc.checked = true;
-        }
-
-        if (cached.vtype) {
-           const vc = Array.from(document.querySelectorAll('input[name="vtype"]')).find(el => el.value === cached.vtype);
-           if (vc) vc.checked = true;
-        }
+      } catch (err) {
+        console.warn('Could not preload active entries:', err);
       }
     }
 
-    function clearLocalLogs() {
-      if(confirm('Are you sure you want to clear the local logs? This does not delete any data from Google Sheets.')) {
-        localStorage.removeItem(getTodayKey());
-        renderLog();
-        document.getElementById('log-count').textContent = '0';
-        showToast('Local logs cleared');
-      }
+    // Drawer Controls
+    function openDrawer() {
+      renderDrawerLogs();
+      document.getElementById('drawer-overlay').classList.add('show');
+      document.getElementById('side-drawer').classList.add('show');
+    }
+    function closeDrawer() {
+      document.getElementById('drawer-overlay').classList.remove('show');
+      document.getElementById('side-drawer').classList.remove('show');
     }
 
-    document.querySelectorAll('input[type="text"]').forEach(input => {
-      input.addEventListener('input', function () {
-        let val = this.value.toUpperCase();
-        if (this.id === 'plate') {
-          val = val.replace(/\s+/g, '');
-          autofillVehicle(val);
-        }
-        this.value = val;
-      });
-    });
-
-    function getTodayKey() {
-      const d = new Date();
-      return `gate_log_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
-    }
-
-    function getLogs() {
-      try { return JSON.parse(localStorage.getItem(getTodayKey()) || '[]'); } catch { return []; }
-    }
-
-    function saveLogs(logs) {
-      localStorage.setItem(getTodayKey(), JSON.stringify(logs));
-    }
-
-    function renderLog() {
+    function renderDrawerLogs() {
       const logs = getLogs();
-      const tbody = document.getElementById('log-body');
-      document.getElementById('log-count').textContent = logs.length;
-
+      const container = document.getElementById('drawer-log-content');
       if (logs.length === 0) {
-        tbody.innerHTML = '<div style="padding:1rem;color:var(--outline);font-size:0.75rem;text-align:center">No entries yet today</div>';
+        container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">No entries logged yet today.</div>';
         return;
       }
 
-      tbody.innerHTML = logs.slice().reverse().map(e => `
-        <div class="log-item">
-            <div class="log-icon"><span class="material-symbols-outlined">login</span></div>
-            <div class="log-content">
-                <div class="log-top">
-                    <span class="log-plate">${e.plate}</span>
-                    <span class="log-time">${e.timeIn}</span>
-                </div>
-                <p class="log-desc">${e.driver} - ${e.dest}</p>
-                <span class="log-pill">AUTHORIZED</span>
-            </div>
+      container.innerHTML = logs.slice().reverse().map(e => `
+        <div class="log-card-desktop">
+          <div>
+            <div class="log-plate">${e.plate}</div>
+            <div style="font-size:0.8rem; color:var(--text-muted);">${e.driver} • ${e.company}</div>
+            <div style="font-size:0.75rem; color:var(--pg-light-blue); font-weight:600;">Dest: ${e.dest}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'Share Tech Mono',monospace; font-weight:700;">${e.timeIn}</div>
+            <span style="font-size:0.7rem; background:rgba(16,185,129,0.15); color:var(--pg-green); font-weight:800; padding:2px 8px; border-radius:4px;">IN</span>
+          </div>
         </div>
-    `).join('');
-    }
-    renderLog();
-
-    function getTimestamp() {
-      const now = new Date();
-      return String(now.getHours()).padStart(2, '0') + ':' +
-        String(now.getMinutes()).padStart(2, '0') + ':' + String(now.getSeconds()).padStart(2, '0');
+      `).join('');
     }
 
-    async function submitEntry() {
-      const plate = document.getElementById('plate').value.trim();
-      const driver = document.getElementById('driver').value.trim();
-      const company = document.getElementById('company').value.trim();
-      const ktp = document.getElementById('ktp').value.trim();
-      const helper = document.getElementById('helper').value.trim();
-      const helperID = document.getElementById('helper-id').value.trim();
-      const driverCard = document.getElementById('driver-card').value.trim();
-      const simEl = document.querySelector('input[name="simtype"]:checked');
-      const vtypeEl = document.querySelector('input[name="vtype"]:checked');
-
-      // Multi-select destination: collect all checked and join with '/'
-      const destEls = document.querySelectorAll('input[name="dest"]:checked');
-      const destValue = Array.from(destEls).map(el => el.value).join('/');
-
-      const approver = document.getElementById('approver').value.trim();
-      const products = document.getElementById('products').value.trim();
-      const details = document.getElementById('details').value.trim();
-      
-      const annotationEls = document.querySelectorAll('input[name="annotation"]:checked');
-      const annotations = Array.from(annotationEls).map(el => el.value).join(', ');
-
-      const shipmentEls = document.querySelectorAll('input[name="shipment"]:checked');
-      const shipments = Array.from(shipmentEls).map(el => el.value).join(', ');
-
-      if (!plate) return highlight('plate', 'Enter license plate');
-      if (!driver) return highlight('driver', 'Enter driver name');
-      if (!company) return highlight('company', 'Enter company');
-      if (!simEl) return showToast('Select SIM type', true);
-      if (!ktp) return highlight('ktp', 'Enter ID number');
-      if (!driverCard) return highlight('driver-card', 'Enter card number');
-      if (!vtypeEl) return showToast('Select vehicle type', true);
-      if (destEls.length === 0) return showToast('Select at least one destination', true);
-      if (!shipments) return showToast('Select shipment status', true);
-
-      const btn = document.querySelector('.btn-primary');
-      if (btn) btn.disabled = true;
-
-      // Instant Duplicate Validation via Cache + Local Activity
-      const cleanPlate = plate.toUpperCase().replace(/\s+/g, '');
-      if (activeEntriesCache.includes(cleanPlate)) {
-        showToast(`Gagal: Kendaraan ${plate} belum keluar dari Post 1!`, true);
-        if (btn) btn.disabled = false;
-        return;
-      }
-      
-      // Also check local logs just in case cache is delayed by 1 min (prevent double-clicks within 2 mins)
-      const recentLocal = getLogs().find(e => String(e.plate).toUpperCase().replace(/\s+/g, '') === cleanPlate);
-      if (recentLocal && (Date.now() - recentLocal.id < 2 * 60 * 1000)) {
-        showToast(`Gagal: Kendaraan ${plate} baru saja masuk (Tunggu 2 menit jika ini entry baru).`, true);
-        if (btn) btn.disabled = false;
-        return;
-      }
-
-      const entry = {
-        id: Date.now(),
-        date: new Date().toLocaleDateString('id-ID'),
-        timeIn: getTimestamp(),
-        fullTimeIn: new Date().toISOString(),
-        plate, driver, company, simtype: simEl.value,
-        ktp, helper, helperID, driverCard, vtype: vtypeEl.value, dest: destValue,
-        annotations, approver, shipments, products, details,
-        post: 'Post 7'
-      };
-
-      const logs = getLogs();
-      logs.push(entry);
-      saveLogs(logs);
-      saveVehicleCache(entry);
-      try {
-        await sendToGoogleSheets(entry);
-      } finally {
-        renderLog();
-        resetForm();
-        showToast(`Entry logged: ${plate}`);
-        if (btn) btn.disabled = false;
-      }
-    }
-
-    function highlight(id, msg) {
-      const el = document.getElementById(id);
-      el.style.borderColor = 'var(--error)';
-      el.focus();
-      setTimeout(() => { el.style.borderColor = ''; }, 2000);
-      showToast(msg, true);
-    }
-
+    // Toast Alert
     function showToast(msg, isError = false) {
-      const t = document.getElementById('toast');
-      t.className = 'toast show' + (isError ? ' error' : '');
+      const t = document.getElementById('toast-alert');
+      t.className = 'toast-alert' + (isError ? ' error' : '');
       document.getElementById('toast-icon').textContent = isError ? 'error' : 'check_circle';
       document.getElementById('toast-msg').textContent = msg;
-      setTimeout(() => t.classList.remove('show'), 3000);
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
     }
 
+    // Form Reset
     function resetForm() {
       document.getElementById('plate').value = '';
       document.getElementById('driver').value = '';
@@ -1284,10 +906,85 @@
       document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(r => r.checked = false);
     }
 
-    // --- SHEET SYNC ---
+    // Form Submission
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzu2PGoNHtENMa_U3XMfvXMcdiiiBAI2YL8eHzWbUm5K2nkshEAruJSe_m1j-CS9KEx/exec';
-    async function sendToGoogleSheets(entry) {
+
+    async function submitEntry() {
+      const plate = document.getElementById('plate').value.trim().toUpperCase();
+      const driver = document.getElementById('driver').value.trim();
+      const company = document.getElementById('company').value.trim();
+      const ktp = document.getElementById('ktp').value.trim();
+      const helper = document.getElementById('helper').value.trim();
+      const helperID = document.getElementById('helper-id').value.trim();
+      const driverCard = document.getElementById('driver-card').value.trim();
+      const simEl = document.querySelector('input[name="simtype"]:checked');
+      const vtypeEl = document.querySelector('input[name="vtype"]:checked');
+
+      const destEls = document.querySelectorAll('input[name="dest"]:checked');
+      const destValue = Array.from(destEls).map(el => el.value).join('/');
+
+      const approver = document.getElementById('approver').value.trim();
+      const products = document.getElementById('products').value.trim();
+      const details = document.getElementById('details').value.trim();
+
+      const annotationEls = document.querySelectorAll('input[name="annotation"]:checked');
+      const annotations = Array.from(annotationEls).map(el => el.value).join(', ');
+
+      const shipmentEls = document.querySelectorAll('input[name="shipment"]:checked');
+      const shipments = Array.from(shipmentEls).map(el => el.value).join(', ');
+
+      if (!plate) return showToast('Enter License Plate', true);
+      if (!driver) return showToast('Enter Driver Name', true);
+      if (!ktp) return showToast('Enter Driver ID (KTP)', true);
+      if (!company) return showToast('Enter Company Name', true);
+      if (!simEl) return showToast('Select SIM Type', true);
+      if (!driverCard) return showToast('Enter Driver Card Badge No', true);
+      if (!vtypeEl) return showToast('Select Vehicle Type', true);
+      if (destEls.length === 0) return showToast('Select at least 1 Destination', true);
+      if (!shipments) return showToast('Select Shipment Action', true);
+
+      const btn = document.getElementById('btn-submit');
+      btn.disabled = true;
+
+      // Duplicate Check
+      const cleanPlate = plate.replace(/\s+/g, '');
+      if (activeEntriesCache.includes(cleanPlate)) {
+        showToast(`Gagal: Kendaraan ${plate} belum keluar dari Post 1!`, true);
+        btn.disabled = false;
+        return;
+      }
+
+      const recentLocal = getLogs().find(e => String(e.plate).replace(/\s+/g, '') === cleanPlate);
+      if (recentLocal && (Date.now() - recentLocal.id < 2 * 60 * 1000)) {
+        showToast(`Gagal: Kendaraan ${plate} baru saja masuk.`, true);
+        btn.disabled = false;
+        return;
+      }
+
+      const now = new Date();
+      const timeInStr = String(now.getHours()).padStart(2,'0') + ':' +
+                        String(now.getMinutes()).padStart(2,'0') + ':' +
+                        String(now.getSeconds()).padStart(2,'0');
+
+      const entry = {
+        id: Date.now(),
+        date: now.toLocaleDateString('id-ID'),
+        timeIn: timeInStr,
+        fullTimeIn: now.toISOString(),
+        plate, driver, company, simtype: simEl.value,
+        ktp, helper, helperID, driverCard, vtype: vtypeEl.value, dest: destValue,
+        annotations, approver, shipments, products, details,
+        post: 'Post 7'
+      };
+
+      const logs = getLogs();
+      logs.push(entry);
+      saveLogs(logs);
+
+      // Submit to Google Sheets
       document.getElementById('sync-status').textContent = 'Syncing...';
+      document.getElementById('sync-status-badge').classList.add('syncing');
+
       try {
         const res = await fetch(SHEET_URL, {
           method: 'POST',
@@ -1297,34 +994,27 @@
         const json = await res.json();
         if (json.status === 'ok') {
           document.getElementById('sync-status').textContent = 'Synced ✓';
+          showToast(`Entry Logged: ${plate}`);
         } else {
-          console.error('Sync error:', json.message);
-          document.getElementById('sync-status').textContent = 'Sync Error: ' + (json.message || 'Unknown');
+          document.getElementById('sync-status').textContent = 'Saved Locally';
+          showToast(`Saved Locally (Server warning: ${json.message || 'Check connection'})`);
         }
-        setTimeout(() => document.getElementById('sync-status').textContent = 'Ready for Entry', 3000);
       } catch (err) {
-        console.error('Network error:', err);
-        document.getElementById('sync-status').textContent = 'Saved Locally (offline)';
+        document.getElementById('sync-status').textContent = 'Offline (Saved Locally)';
+        showToast(`Entry Saved Locally: ${plate}`);
+      } finally {
+        document.getElementById('sync-status-badge').classList.remove('syncing');
+        resetForm();
+        btn.disabled = false;
+        preloadActiveEntries();
       }
     }
 
-    // --- PWA SERVICE WORKER ---
+    preloadActiveEntries();
+
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then(reg => {
-          console.log('SW registered: ', reg.scope);
-        }).catch(err => {
-          console.log('SW registration failed: ', err);
-        });
-      });
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
     }
-
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-    });
-</script>
+  </script>
 </body>
-
 </html>

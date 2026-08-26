@@ -10,14 +10,17 @@ function parseDateTime(dateStr, timeStr) {
   if (!dateStr || !timeStr) return new Date();
   try {
     const d = new Date(`${dateStr}T${timeStr}`);
-    if (isNaN(d.getTime())) {
-       const parts = dateStr.split('/');
-       if (parts.length === 3) {
-           return new Date(`${parts[2]}-${parts[1]}-${parts[0]}T${timeStr}`);
-       }
-       return new Date();
+    if (!isNaN(d.getTime())) return d;
+
+    const parts = String(dateStr).split('/');
+    if (parts.length === 3) {
+      const day = parts[0].padStart(2, '0');
+      const month = parts[1].padStart(2, '0');
+      const year = parts[2];
+      const parsed = new Date(`${year}-${month}-${day}T${timeStr}`);
+      if (!isNaN(parsed.getTime())) return parsed;
     }
-    return d;
+    return new Date();
   } catch (e) {
     return new Date();
   }

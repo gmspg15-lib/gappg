@@ -35,6 +35,7 @@ function applyFilters() {
   }
   
   renderKPI(filtered);
+  renderHourlyChart(filtered);
   renderTable(filtered);
 }
 
@@ -42,60 +43,82 @@ function renderKPI(data) {
   document.getElementById('kpi-total').textContent = SheetsSvc.getTotalVehicles(data).toLocaleString();
   document.getElementById('kpi-in').textContent = SheetsSvc.getInCount(data).toLocaleString();
   document.getElementById('kpi-out').textContent = SheetsSvc.getOutCount(data).toLocaleString();
-  document.getElementById('kpi-duration').innerHTML = SheetsSvc.getAverageDuration(data) + ' <span class="text-sm font-semibold">min</span>';
+  document.getElementById('kpi-duration').innerHTML = SheetsSvc.getAverageDuration(data) + ' <span style="font-size:0.9rem; font-weight:600;">min</span>';
   document.getElementById('kpi-issues').textContent = SheetsSvc.getWarningCount(data).toLocaleString();
 
   renderTopCompanies(data);
   renderDestinations(data);
 }
 
+function renderHourlyChart(data) {
+  const hourlyCounts = SheetsSvc.getHourlyData(data); // Array of 24 ints
+  const maxCount = Math.max(...hourlyCounts, 1);
+  const container = document.getElementById('hourly-chart-bars');
+
+  const html = hourlyCounts.map((count, hour) => {
+    const pct = Math.round((count / maxCount) * 100);
+    const hourLabel = String(hour).padStart(2, '0') + ':00';
+    return `
+      <div class="bar-col" title="${hourLabel} — ${count} Vehicles">
+        <div class="bar-fill" style="height: ${Math.max(pct, 5)}%;"></div>
+        <div class="bar-label">${hour % 4 === 0 ? hourLabel : ''}</div>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = html;
+}
+
 function renderTopCompanies(data) {
   const topCompanies = SheetsSvc.getTopCompanies(data);
   const html = topCompanies.map((c, i) => `
-    <div class="flex justify-between items-center text-xs">
-      <span class="font-bold text-brand-blue">${c.company}</span>
-      <span class="${i===0?'bg-brand-bluebg text-brand-blue':'bg-brand-lightbg text-brand-muted'} font-bold px-2 py-0.5 rounded text-[10px]">${c.count} Entries</span>
+    <div class="item-row">
+      <span style="font-weight:700;">${c.company}</span>
+      <span style="font-weight:700; color:var(--pg-blue); font-size:0.8rem; background:rgba(0,61,165,0.08); padding:2px 8px; border-radius:6px;">${c.count} Entries</span>
     </div>
   `).join('');
-  document.getElementById('top-companies-list').innerHTML = html || '<div class="text-xs text-brand-muted">No companies</div>';
+  document.getElementById('top-companies-list').innerHTML = html || '<div style="font-size:0.85rem; color:var(--text-muted);">No companies logged for this date.</div>';
 }
 
 function renderDestinations(data) {
   const destinations = SheetsSvc.getDestinationDistribution(data);
   const html = destinations.map(d => `
-    <div class="flex justify-between items-center text-xs">
-      <span class="text-brand-muted">${d.destination}</span>
-      <span class="font-bold text-brand-blue">${d.percentage}%</span>
+    <div class="item-row">
+      <span style="color:var(--text-muted); font-weight:600;">${d.destination}</span>
+      <span style="font-weight:800; color:var(--pg-blue);">${d.percentage}%</span>
     </div>
   `).join('');
-  document.getElementById('destination-list').innerHTML = html || '<div class="text-xs text-brand-muted">No destinations</div>';
+  document.getElementById('destination-list').innerHTML = html || '<div style="font-size:0.85rem; color:var(--text-muted);">No destinations logged for this date.</div>';
 }
 
 function renderTable(data) {
   const recent = SheetsSvc.getRecentEntries(data, 50);
   const html = recent.map(r => {
     const hasWarning = !!r.annotation;
-    const statusClass = r.status === 'IN' ? 'bg-brand-bluebg text-brand-blue' : 'bg-brand-lightbg text-brand-muted';
+    const isIN = r.status === 'IN';
+    const statusBadge = isIN
+      ? '<span class="badge-in">IN</span>'
+      : '<span class="badge-out-table">OUT</span>';
+      
+    const flagIcon = hasWarning
+      ? '<span class="material-symbols-outlined" style="color:var(--pg-yellow); font-size:18px;">warning</span>'
+      : '<span class="material-symbols-outlined" style="color:var(--pg-green); font-size:18px;">check_circle</span>';
+
     return `
-      <tr class="border-b border-brand-lightbg ${hasWarning?'bg-brand-warnbg hover:bg-yellow-50':'hover:bg-gray-50/50'}">
-        <td class="px-6 py-4">${r.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})}</td>
-        <td class="px-6 py-4 font-bold">${r.plate_number}</td>
-        <td class="px-6 py-4 text-gray-700">${r.driver_name}</td>
-        <td class="px-6 py-4 text-gray-700">${r.company}</td>
-        <td class="px-6 py-4 text-gray-700">${r.destination}</td>
-        <td class="px-6 py-4 text-gray-700">${r.shipment_type}</td>
-        <td class="px-6 py-4">
-          <span class="${statusClass} font-bold px-2 py-0.5 rounded text-[10px]">${r.status}</span>
-        </td>
-        <td class="px-6 py-4 text-center">
-          ${hasWarning 
-            ? '<span class="material-symbols-outlined text-yellow-600" style="font-size: 16px;">warning</span>' 
-            : '<span class="material-symbols-outlined text-brand-green border-2 border-brand-green rounded-full p-0.5" style="font-size: 8px; border-width: 1.5px; font-weight: bold;">check</span>'}
-        </td>
+      <tr>
+        <td style="font-family:'Share Tech Mono',monospace;">${r.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})}</td>
+        <td style="font-family:'Share Tech Mono',monospace; font-weight:700; color:var(--pg-blue);">${r.plate_number}</td>
+        <td>${r.driver_name || '—'}</td>
+        <td style="color:var(--text-muted);">${r.company || '—'}</td>
+        <td>${r.destination || '—'}</td>
+        <td>${r.shipment_type || '—'}</td>
+        <td>${statusBadge}</td>
+        <td style="text-align:center;">${flagIcon}</td>
       </tr>
     `;
   }).join('');
-  document.getElementById('recent-entries-tbody').innerHTML = html || '<tr><td colspan="8" class="text-center py-4 text-brand-muted">No records found</td></tr>';
+
+  document.getElementById('recent-entries-tbody').innerHTML = html || '<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--text-muted);">No activity records found.</td></tr>';
 }
 
 export function setDate(date) {
@@ -115,19 +138,18 @@ document.getElementById('filter-date').addEventListener('change', (e) => {
 
 document.querySelectorAll('.shift-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
-    document.querySelectorAll('.shift-btn').forEach(b => {
-      b.classList.remove('bg-white', 'text-brand-blue', 'shadow-sm');
-      b.classList.add('text-brand-muted');
-    });
-    e.target.classList.remove('text-brand-muted');
-    e.target.classList.add('bg-white', 'text-brand-blue', 'shadow-sm');
+    document.querySelectorAll('.shift-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
     selectedShift = e.target.getAttribute('data-shift');
     applyFilters();
   });
 });
 
 document.getElementById('btn-refresh').addEventListener('click', async () => {
-  document.getElementById('refresh-icon').classList.add('animate-spin');
+  const icon = document.getElementById('refresh-icon');
+  icon.style.transform = 'rotate(360deg)';
+  icon.style.transition = 'transform 0.5s ease';
+  
   try {
     const data = await fetchSheetData(true);
     currentData = data || [];
@@ -137,7 +159,7 @@ document.getElementById('btn-refresh').addEventListener('click', async () => {
     console.error('REFRESH ERROR:', err);
     document.getElementById('last-sync').textContent = 'Error connecting to Sheet';
   } finally {
-    document.getElementById('refresh-icon').classList.remove('animate-spin');
+    setTimeout(() => { icon.style.transform = 'none'; }, 500);
   }
 });
 

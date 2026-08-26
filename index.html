@@ -5,118 +5,157 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Gate Access Portal | P&G</title>
   <link rel="manifest" href="manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
   <style>
     :root {
       --pg-blue: #003da5;
       --pg-blue-dark: #002870;
       --pg-light-blue: #00a3e0;
       --pg-yellow: #fedb00;
-      --bg: #f8fafd;
+      --bg: #f4f6fa;
       --surface: #ffffff;
+      --surface-subtle: #f8fafc;
       --text: #0f172a;
-      --muted: #475569;
+      --muted: #64748b;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 12px 32px rgba(0, 61, 165, 0.08);
     }
-    
+
+    body.dark {
+      --bg: #090d16;
+      --surface: #131b2e;
+      --surface-subtle: #1a243b;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --border-color: #1e293b;
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.4);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
-    
+
     body {
       background-color: var(--bg);
       background-image: 
-        radial-gradient(circle at 10% 10%, rgba(0, 61, 165, 0.04) 0%, transparent 50%),
-        radial-gradient(circle at 90% 90%, rgba(0, 163, 224, 0.05) 0%, transparent 50%);
+        radial-gradient(circle at 10% 10%, rgba(0, 61, 165, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 90% 90%, rgba(0, 163, 224, 0.06) 0%, transparent 50%);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
-      overflow-x: hidden;
+      padding: 40px 20px;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     /* P&G Top Ribbon */
-    .ribbon {
+    .top-ribbon {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 6px;
-      background: linear-gradient(90deg, var(--pg-blue) 0%, var(--pg-light-blue) 45%, var(--pg-yellow) 100%);
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--pg-blue) 0%, var(--pg-light-blue) 50%, var(--pg-yellow) 100%);
       z-index: 1000;
+    }
+
+    /* Theme Switcher Button */
+    .theme-toggle-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border-color);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+      z-index: 1000;
+    }
+
+    .theme-toggle-btn:hover {
+      transform: scale(1.05);
+      border-color: var(--pg-blue);
     }
 
     .container {
       width: 100%;
-      max-width: 810px;
-      padding: 36px 18px;
+      max-width: 900px;
       text-align: center;
-      position: relative;
-      z-index: 1;
-      animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(16px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .header-area {
-      margin-bottom: 45px;
+      margin-bottom: 40px;
     }
 
     .logo-wrapper {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 72px;
-      height: 72px;
-      background: var(--surface);
-      border-radius: 50%;
-      box-shadow: 0 9px 22px rgba(0, 61, 165, 0.1);
-      margin-bottom: 22px;
-      border: 2px solid rgba(0, 61, 165, 0.05);
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--pg-blue) 0%, var(--pg-blue-dark) 100%);
+      border-radius: 22px;
+      box-shadow: 0 10px 25px rgba(0, 61, 165, 0.25);
+      margin-bottom: 20px;
+      color: #ffffff;
       transition: transform 0.3s ease;
     }
 
     .logo-wrapper:hover {
-      transform: scale(1.05);
-    }
-
-    .logo-wrapper svg {
-      width: 36px;
-      height: 36px;
-      color: var(--pg-blue);
+      transform: scale(1.06) rotate(-3deg);
     }
 
     .title {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 2.88rem;
+      font-size: 3.2rem;
       font-weight: 800;
       color: var(--pg-blue);
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 11px;
-      text-shadow: 0 2px 9px rgba(0, 61, 165, 0.1);
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    body.dark .title {
+      color: #38bdf8;
     }
 
     .subtitle {
-      font-size: 1.03rem;
+      font-size: 1.05rem;
       color: var(--muted);
       font-weight: 500;
-      letter-spacing: -0.2px;
     }
 
+    /* 2x2 Grid Layout */
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 27px;
+      gap: 24px;
     }
 
     @media (max-width: 768px) {
@@ -127,19 +166,18 @@
 
     .card {
       background: var(--surface);
-      border-radius: 18px;
-      padding: 36px 27px;
+      border-radius: 20px;
+      padding: 32px 26px;
       text-align: left;
       text-decoration: none;
       color: inherit;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 9px 27px rgba(0, 0, 0, 0.04);
-      border: 1px solid rgba(0, 0, 0, 0.03);
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
-      height: 100%;
     }
 
     .card::before {
@@ -147,102 +185,78 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-      z-index: 1;
-      opacity: 0;
-      transition: opacity 0.4s ease;
+      right: 0;
+      height: 4px;
+      background: var(--pg-blue);
+      transition: height 0.3s ease;
     }
+
+    .card.entry-desktop::before { background: var(--pg-blue); }
+    .card.entry-mobile::before { background: var(--pg-light-blue); }
+    .card.exit::before { background: var(--pg-yellow); }
+    .card.dashboard::before { background: var(--pg-blue-dark); }
+
+    body.dark .card.dashboard::before { background: #38bdf8; }
 
     .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0, 61, 165, 0.1);
-    }
-
-    .card:hover::before {
-      opacity: 1;
-    }
-
-    /* Entry Card Theming */
-    .card.entry {
-      border-top: 4px solid var(--pg-light-blue);
-    }
-    .card.entry:hover {
-      background: linear-gradient(145deg, #ffffff 0%, #f4fbff 100%);
-      border-color: var(--pg-light-blue);
-    }
-
-    /* Exit Card Theming */
-    .card.exit {
-      border-top: 4px solid var(--pg-yellow);
-    }
-    .card.exit:hover {
-      background: linear-gradient(145deg, #ffffff 0%, #fffef0 100%);
-      border-color: var(--pg-yellow);
-    }
-
-    /* Dashboard Card Theming */
-    .card.dashboard {
-      border-top: 4px solid var(--pg-blue);
-      grid-column: span 2;
-      justify-self: center;
-      width: calc(50% - 15px);
-    }
-    @media (max-width: 768px) {
-      .card.dashboard {
-        grid-column: span 1;
-        width: 100%;
-      }
-    }
-    .card.dashboard:hover {
-      background: linear-gradient(145deg, #ffffff 0%, #f0f4ff 100%);
-      border-color: var(--pg-blue);
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(0, 61, 165, 0.2);
     }
 
     .card-icon {
       width: 58px;
       height: 58px;
-      border-radius: 14px;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 22px;
-      position: relative;
-      z-index: 2;
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
     }
 
     .card:hover .card-icon {
-      transform: scale(1.1) rotate(-5deg);
+      transform: scale(1.1);
     }
 
-    .card.entry .card-icon {
-      background: rgba(0, 163, 224, 0.1);
+    .card.entry-desktop .card-icon {
+      background: rgba(0, 61, 165, 0.1);
+      color: var(--pg-blue);
+    }
+    body.dark .card.entry-desktop .card-icon {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+    }
+
+    .card.entry-mobile .card-icon {
+      background: rgba(0, 163, 224, 0.12);
       color: var(--pg-light-blue);
-      box-shadow: 0 8px 20px rgba(0, 163, 224, 0.15);
     }
 
     .card.exit .card-icon {
       background: rgba(254, 219, 0, 0.2);
       color: #b39700;
-      box-shadow: 0 8px 20px rgba(254, 219, 0, 0.2);
+    }
+    body.dark .card.exit .card-icon {
+      color: var(--pg-yellow);
     }
 
     .card.dashboard .card-icon {
-      background: rgba(0, 61, 165, 0.1);
-      color: var(--pg-blue);
-      box-shadow: 0 8px 20px rgba(0, 61, 165, 0.15);
+      background: rgba(0, 40, 112, 0.1);
+      color: var(--pg-blue-dark);
+    }
+    body.dark .card.dashboard .card-icon {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
     }
 
     .card-title {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--pg-blue);
-      margin-bottom: 11px;
-      position: relative;
-      z-index: 2;
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+      text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
@@ -250,93 +264,140 @@
       font-size: 0.9rem;
       color: var(--muted);
       line-height: 1.5;
-      position: relative;
-      z-index: 2;
       flex-grow: 1;
     }
 
-    .arrow-icon {
-      margin-top: 22px;
-      align-self: flex-end;
+    .card-footer {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .badge-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--surface-subtle);
       color: var(--muted);
-      opacity: 0;
-      transform: translateX(-10px);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-      z-index: 2;
+      border: 1px solid var(--border-color);
+    }
+
+    .arrow-icon {
+      color: var(--muted);
+      transition: transform 0.3s ease, color 0.3s ease;
     }
 
     .card:hover .arrow-icon {
-      opacity: 1;
-      transform: translateX(0);
+      transform: translateX(4px);
       color: var(--pg-blue);
+    }
+    body.dark .card:hover .arrow-icon {
+      color: #38bdf8;
     }
 
     .footer {
-      margin-top: 54px;
-      font-size: 0.76rem;
+      margin-top: 50px;
+      font-size: 0.8rem;
       color: var(--muted);
-      opacity: 0.8;
       font-weight: 500;
     }
   </style>
 </head>
 <body>
-  <div class="ribbon"></div>
+
+  <!-- P&G Top Accent Ribbon -->
+  <div class="top-ribbon"></div>
+
+  <!-- Theme Switcher -->
+  <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+    <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
+  </button>
+
   <div class="container">
     <div class="header-area">
       <div class="logo-wrapper">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-          <path d="M2 17l10 5 10-5"></path>
-          <path d="M2 12l10 5 10-5"></path>
-        </svg>
+        <span class="material-symbols-outlined" style="font-size: 42px">security</span>
       </div>
       <h1 class="title">Gate Access Portal</h1>
-      <p class="subtitle">Select your operating terminal to continue</p>
+      <p class="subtitle">Select operating terminal or launch analytics board</p>
     </div>
 
     <div class="grid">
-      <a href="post7-entry.html" class="card entry">
+      <!-- POST 7 DESKTOP -->
+      <a href="post7-entry.html" class="card entry-desktop">
         <div class="card-icon">
-          <span class="material-symbols-outlined" style="font-size: 28px">login</span>
+          <span class="material-symbols-outlined" style="font-size: 28px">desktop_windows</span>
         </div>
-        <div class="card-title">POST 7 (Entry)</div>
-        <div class="card-desc">Log arriving vehicles, specify shipment details, and calculate cargo destinations with OCR.</div>
-        <div class="arrow-icon">
-          <span class="material-symbols-outlined">arrow_forward</span>
+        <div class="card-title">POST 7 (Desktop)</div>
+        <div class="card-desc">Desktop terminal interface for logging arriving vehicles, driver details, and cargo destinations.</div>
+        <div class="card-footer">
+          <span class="badge-tag">Gate 7 Entry</span>
+          <span class="material-symbols-outlined arrow-icon">arrow_forward</span>
         </div>
       </a>
 
+      <!-- POST 7 MOBILE -->
+      <a href="post7-entry-mobile.html" class="card entry-mobile">
+        <div class="card-icon">
+          <span class="material-symbols-outlined" style="font-size: 28px">smartphone</span>
+        </div>
+        <div class="card-title">POST 7 (Mobile)</div>
+        <div class="card-desc">Touch-optimized mobile interface for security officers on smartphones & mobile devices.</div>
+        <div class="card-footer">
+          <span class="badge-tag">Mobile Terminal</span>
+          <span class="material-symbols-outlined arrow-icon">arrow_forward</span>
+        </div>
+      </a>
+
+      <!-- POST 1 EXIT -->
       <a href="post1-exit.html" class="card exit">
         <div class="card-icon">
           <span class="material-symbols-outlined" style="font-size: 28px">logout</span>
         </div>
         <div class="card-title">POST 1 (Exit)</div>
         <div class="card-desc">Track departing vehicles, search active cache, calculate time duration, and process bulk checkouts.</div>
-        <div class="arrow-icon">
-          <span class="material-symbols-outlined">arrow_forward</span>
+        <div class="card-footer">
+          <span class="badge-tag">Gate 1 Exit</span>
+          <span class="material-symbols-outlined arrow-icon">arrow_forward</span>
         </div>
       </a>
 
+      <!-- DASHBOARD -->
       <a href="dashboard.html" class="card dashboard">
         <div class="card-icon">
           <span class="material-symbols-outlined" style="font-size: 28px">monitoring</span>
         </div>
         <div class="card-title">DASHBOARD</div>
         <div class="card-desc">View real-time gate metrics, vehicle entry history, and current active traffic data.</div>
-        <div class="arrow-icon">
-          <span class="material-symbols-outlined">arrow_forward</span>
+        <div class="card-footer">
+          <span class="badge-tag">Analytics Board</span>
+          <span class="material-symbols-outlined arrow-icon">arrow_forward</span>
         </div>
       </a>
     </div>
 
     <div class="footer">
-      &copy; 2026 rrfmargaret. Powered by Vercel & Google Apps Script.
+      &copy; 2026 rrfmargaret • Powered by Vercel & Google Apps Script
     </div>
   </div>
-  
+
   <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      document.getElementById('theme-icon').textContent = isDark ? 'light_mode' : 'dark_mode';
+      localStorage.setItem('gate_portal_theme', isDark ? 'dark' : 'light');
+    }
+
+    if (localStorage.getItem('gate_portal_theme') === 'dark') {
+      document.body.classList.add('dark');
+      document.getElementById('theme-icon').textContent = 'light_mode';
+    }
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
     }

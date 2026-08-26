@@ -458,15 +458,15 @@
   <!-- Header Bar -->
   <header class="app-bar">
     <div class="app-brand">
+      <button class="icon-btn" onclick="goBack()" title="Back to Portal">
+        <span class="material-symbols-outlined" style="font-size:22px">arrow_back</span>
+      </button>
       <a href="index.html" style="text-decoration:none; color:inherit;">
-        <div class="brand-icon">
-          <span class="material-symbols-outlined" style="font-size:24px">arrow_back</span>
+        <div>
+          <div class="brand-title">VEHICLE ENTRY DASHBOARD</div>
+          <div class="brand-sub">P&G Operational Gate Intelligence</div>
         </div>
       </a>
-      <div>
-        <div class="brand-title">VEHICLE ENTRY DASHBOARD</div>
-        <div class="brand-sub">P&G Operational Gate Intelligence</div>
-      </div>
     </div>
 
     <div class="app-controls">
@@ -618,6 +618,14 @@
 
   <script type="module" src="./dashboard.js"></script>
   <script>
+    function goBack() {
+      if (window.history.length > 1 && document.referrer && document.referrer.includes(location.host)) {
+        window.history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
     function toggleTheme() {
       document.body.classList.toggle('dark');
       const isDark = document.body.classList.contains('dark');

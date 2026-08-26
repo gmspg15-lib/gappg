@@ -607,15 +607,15 @@
   <!-- Sticky App Bar -->
   <header class="app-bar">
     <div class="app-brand">
+      <button class="icon-btn" onclick="goBack()" title="Back to Portal">
+        <span class="material-symbols-outlined" style="font-size:22px">arrow_back</span>
+      </button>
       <a href="index.html" style="text-decoration:none; color:inherit;">
-        <div class="brand-icon">
-          <span class="material-symbols-outlined" style="font-size:22px">arrow_back</span>
+        <div>
+          <div class="brand-title">POST 7 ENTRY</div>
+          <div class="brand-sub">Mobile Terminal</div>
         </div>
       </a>
-      <div>
-        <div class="brand-title">POST 7 ENTRY</div>
-        <div class="brand-sub">Mobile Terminal</div>
-      </div>
     </div>
     <div class="app-actions">
       <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
@@ -887,11 +887,32 @@
       }
     }
 
+    // --- NAVIGATION BACK HANDLER ---
+    function goBack() {
+      if (document.getElementById('bottom-sheet').classList.contains('show')) {
+        closeLogSheet();
+        return;
+      }
+      if (window.history.length > 1 && document.referrer && document.referrer.includes(location.host)) {
+        window.history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    window.addEventListener('popstate', () => {
+      if (document.getElementById('bottom-sheet').classList.contains('show')) {
+        document.getElementById('sheet-overlay').classList.remove('show');
+        document.getElementById('bottom-sheet').classList.remove('show');
+      }
+    });
+
     // --- LOG SHEET DRAWER ---
     function openLogSheet() {
       renderLogSheet();
       document.getElementById('sheet-overlay').classList.add('show');
       document.getElementById('bottom-sheet').classList.add('show');
+      try { history.pushState({ drawerOpen: true }, ''); } catch (e) {}
     }
     function closeLogSheet() {
       document.getElementById('sheet-overlay').classList.remove('show');

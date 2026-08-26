@@ -584,15 +584,15 @@
   <!-- Header -->
   <header class="app-bar">
     <div class="app-brand">
+      <button class="icon-btn" onclick="goBack()" title="Back to Portal">
+        <span class="material-symbols-outlined" style="font-size:22px">arrow_back</span>
+      </button>
       <a href="index.html" style="text-decoration:none; color:inherit;">
-        <div class="brand-icon">
-          <span class="material-symbols-outlined" style="font-size:24px">arrow_back</span>
+        <div>
+          <div class="brand-title">POST 1 EXIT</div>
+          <div class="brand-sub">Gate Departure Terminal</div>
         </div>
       </a>
-      <div>
-        <div class="brand-title">POST 1 EXIT</div>
-        <div class="brand-sub">Gate Departure Terminal</div>
-      </div>
     </div>
 
     <div class="app-controls">
@@ -740,9 +740,13 @@
       document.getElementById('theme-icon').textContent = isDark ? 'light_mode' : 'dark_mode';
       localStorage.setItem('gate_portal_theme', isDark ? 'dark' : 'light');
     }
-    if (localStorage.getItem('gate_portal_theme') === 'dark') {
-      document.body.classList.add('dark');
-      document.getElementById('theme-icon').textContent = 'light_mode';
+    // Navigation Handler
+    function goBack() {
+      if (window.history.length > 1 && document.referrer && document.referrer.includes(location.host)) {
+        window.history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
     }
 
     // Local Storage Helpers

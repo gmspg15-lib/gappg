@@ -7,33 +7,60 @@
   <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
   <style>
+    /* ==========================================================================
+       APPLE DESIGN SYSTEM TOKENS & UTILITIES
+       ========================================================================== */
     :root {
+      /* Palette */
       --pg-blue: #003da5;
       --pg-blue-dark: #002870;
       --pg-light-blue: #00a3e0;
       --pg-yellow: #fedb00;
-      --bg: #f4f6fa;
-      --surface: #ffffff;
-      --surface-subtle: #f8fafc;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border-color: #e2e8f0;
-      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
-      --shadow-lg: 0 12px 32px rgba(0, 61, 165, 0.08);
+      --apple-blue: #007aff;
+      --apple-indigo: #5856d6;
+      --apple-teal: #30b0c7;
+
+      /* Surfaces & Glassmorphism */
+      --bg: #f5f5f7;
+      --surface: rgba(255, 255, 255, 0.72);
+      --surface-hover: rgba(255, 255, 255, 0.88);
+      --surface-subtle: rgba(240, 242, 245, 0.6);
+      --glass-border: rgba(255, 255, 255, 0.65);
+      --border-color: rgba(0, 0, 0, 0.08);
+
+      /* Typography & Text */
+      --text: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --text-muted: #86868b;
+
+      /* Depth & Shadows */
+      --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 16px 40px rgba(0, 61, 165, 0.12);
+      
+      /* Animation Timing */
+      --spring-easing: cubic-bezier(0.16, 1, 0.3, 1);
+      --fast-transition: 150ms cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     body.dark {
-      --bg: #090d16;
-      --surface: #131b2e;
-      --surface-subtle: #1a243b;
-      --text: #f1f5f9;
-      --muted: #94a3b8;
-      --border-color: #1e293b;
-      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
-      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.4);
+      --bg: #000000;
+      --surface: rgba(28, 28, 30, 0.68);
+      --surface-hover: rgba(44, 44, 46, 0.82);
+      --surface-subtle: rgba(44, 44, 46, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --border-color: rgba(255, 255, 255, 0.1);
+      
+      --text: #f5f5f7;
+      --text-secondary: #a1a1a6;
+      --text-muted: #86868b;
+
+      --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 16px 45px rgba(0, 0, 0, 0.65);
     }
 
     * {
@@ -45,113 +72,233 @@
 
     body {
       background-color: var(--bg);
-      background-image: 
-        radial-gradient(circle at 10% 10%, rgba(0, 61, 165, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 90% 90%, rgba(0, 163, 224, 0.06) 0%, transparent 50%);
       color: var(--text);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
-      padding: 40px 20px;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      padding: 40px 24px;
+      overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.4s ease;
     }
 
-    /* P&G Top Ribbon */
+    /* Ambient Background Light Blobs */
+    .ambient-glow-1 {
+      position: fixed;
+      top: -10%;
+      left: 15%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 61, 165, 0.12) 0%, rgba(0, 163, 224, 0.05) 50%, transparent 70%);
+      filter: blur(60px);
+      pointer-events: none;
+      z-index: 0;
+      animation: ambientPulse 12s infinite alternate ease-in-out;
+    }
+
+    .ambient-glow-2 {
+      position: fixed;
+      bottom: -10%;
+      right: 15%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(0, 163, 224, 0.10) 0%, rgba(254, 219, 0, 0.04) 50%, transparent 70%);
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: 0;
+      animation: ambientPulse 14s infinite alternate-reverse ease-in-out;
+    }
+
+    body.dark .ambient-glow-1 {
+      background: radial-gradient(circle, rgba(0, 122, 255, 0.18) 0%, rgba(0, 61, 165, 0.08) 50%, transparent 70%);
+    }
+    body.dark .ambient-glow-2 {
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(88, 86, 214, 0.08) 50%, transparent 70%);
+    }
+
+    @keyframes ambientPulse {
+      0% { transform: scale(1) translate(0, 0); }
+      50% { transform: scale(1.12) translate(30px, -20px); }
+      100% { transform: scale(0.95) translate(-20px, 30px); }
+    }
+
+    /* Top Ribbon Accent */
     .top-ribbon {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: 5px;
-      background: linear-gradient(90deg, var(--pg-blue) 0%, var(--pg-light-blue) 50%, var(--pg-yellow) 100%);
+      height: 4px;
+      background: linear-gradient(90deg, var(--pg-blue) 0%, var(--pg-light-blue) 60%, var(--pg-yellow) 100%);
       z-index: 1000;
     }
 
-    /* Theme Switcher Button */
-    .theme-toggle-btn {
+    /* Floating Fixed Top Controls (PWA Install + Theme Toggle) */
+    .top-controls {
       position: fixed;
       top: 20px;
       right: 20px;
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: var(--surface);
-      border: 1px solid var(--border-color);
-      color: var(--text);
       display: flex;
       align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.2s ease;
+      gap: 10px;
       z-index: 1000;
     }
 
-    .theme-toggle-btn:hover {
-      transform: scale(1.05);
-      border-color: var(--pg-blue);
+    .action-btn {
+      height: 44px;
+      padding: 0 16px;
+      border-radius: 14px;
+      background: var(--surface);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--border-color);
+      border-top: 1px solid var(--glass-border);
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      outline: none;
+      transition: var(--fast-transition);
     }
 
+    .action-btn.icon-only {
+      width: 44px;
+      padding: 0;
+      justify-content: center;
+    }
+
+    .action-btn:hover {
+      background: var(--surface-hover);
+      transform: scale(1.04);
+      box-shadow: var(--shadow-md);
+    }
+
+    .action-btn:active {
+      transform: scale(0.94);
+    }
+
+    .pwa-btn {
+      background: linear-gradient(135deg, rgba(0, 61, 165, 0.08) 0%, rgba(0, 163, 224, 0.08) 100%);
+      color: var(--pg-blue);
+      border-color: rgba(0, 61, 165, 0.2);
+    }
+
+    body.dark .pwa-btn {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(0, 122, 255, 0.15) 100%);
+      color: #38bdf8;
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+
+    /* Main Container */
     .container {
       width: 100%;
-      max-width: 900px;
+      max-width: 920px;
       text-align: center;
-      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1;
+      animation: containerAppear 0.6s var(--spring-easing);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes containerAppear {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
+    /* Header & Side-by-Side Brand Logos */
     .header-area {
-      margin-bottom: 40px;
+      margin-bottom: 44px;
     }
 
-    .logo-wrapper {
+    .logos-hero-container {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, var(--pg-blue) 0%, var(--pg-blue-dark) 100%);
-      border-radius: 22px;
-      box-shadow: 0 10px 25px rgba(0, 61, 165, 0.25);
-      margin-bottom: 20px;
-      color: #ffffff;
-      transition: transform 0.3s ease;
+      gap: 24px;
+      padding: 16px 32px;
+      background: var(--surface);
+      backdrop-filter: blur(25px) saturate(180%);
+      -webkit-backdrop-filter: blur(25px) saturate(180%);
+      border-radius: 28px;
+      border: 1px solid var(--border-color);
+      border-top: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 28px;
+      transition: transform 0.4s var(--spring-easing), box-shadow 0.4s ease;
     }
 
-    .logo-wrapper:hover {
-      transform: scale(1.06) rotate(-3deg);
+    .logos-hero-container:hover {
+      transform: scale(1.03) translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .logo-pg-box {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 6px 14px rgba(0, 61, 165, 0.3));
+    }
+
+    .logo-svg-pg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .logo-divider {
+      width: 1px;
+      height: 42px;
+      background: var(--border-color);
+      opacity: 0.8;
+    }
+
+    .logo-securitas-box {
+      height: 52px;
+      width: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-svg-securitas {
+      height: 52px;
+      width: 115px;
+      color: var(--text);
     }
 
     .title {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 3.2rem;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Barlow Condensed", sans-serif;
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
       font-weight: 800;
-      color: var(--pg-blue);
+      color: var(--text);
+      letter-spacing: -0.03em;
+      line-height: 1.06;
+      margin-bottom: 12px;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      line-height: 1.1;
-      margin-bottom: 8px;
     }
 
     body.dark .title {
-      color: #38bdf8;
+      background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .subtitle {
       font-size: 1.05rem;
-      color: var(--muted);
+      color: var(--text-secondary);
       font-weight: 500;
+      letter-spacing: -0.01em;
+      max-width: 540px;
+      margin: 0 auto;
     }
 
-    /* 2x2 Grid Layout */
+    /* 2x2 Elevated Cards Grid */
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -161,13 +308,17 @@
     @media (max-width: 768px) {
       .grid {
         grid-template-columns: 1fr;
+        gap: 16px;
       }
     }
 
+    /* Apple Translucent Glass Card */
     .card {
       background: var(--surface);
-      border-radius: 20px;
-      padding: 32px 26px;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-radius: 24px;
+      padding: 30px 28px;
       text-align: left;
       text-decoration: none;
       color: inherit;
@@ -175,11 +326,14 @@
       overflow: hidden;
       box-shadow: var(--shadow-sm);
       border: 1px solid var(--border-color);
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      border-top: 1px solid var(--glass-border);
+      transition: transform 0.35s var(--spring-easing), box-shadow 0.35s ease, background 0.35s ease, border-color 0.35s ease;
       display: flex;
       flex-direction: column;
+      cursor: pointer;
     }
 
+    /* Top Accent Line */
     .card::before {
       content: '';
       position: absolute;
@@ -188,39 +342,53 @@
       right: 0;
       height: 4px;
       background: var(--pg-blue);
-      transition: height 0.3s ease;
+      opacity: 0.85;
+      transition: height 0.3s var(--spring-easing), opacity 0.3s ease;
     }
 
-    .card.entry-desktop::before { background: var(--pg-blue); }
-    .card.entry-mobile::before { background: var(--pg-light-blue); }
-    .card.exit::before { background: var(--pg-yellow); }
-    .card.dashboard::before { background: var(--pg-blue-dark); }
+    .card.entry-desktop::before { background: linear-gradient(90deg, var(--pg-blue) 0%, var(--apple-blue) 100%); }
+    .card.entry-mobile::before { background: linear-gradient(90deg, var(--pg-light-blue) 0%, var(--apple-teal) 100%); }
+    .card.exit::before { background: linear-gradient(90deg, #eab308 0%, var(--pg-yellow) 100%); }
+    .card.dashboard::before { background: linear-gradient(90deg, var(--pg-blue-dark) 0%, var(--apple-indigo) 100%); }
 
-    body.dark .card.dashboard::before { background: #38bdf8; }
+    body.dark .card.dashboard::before { background: linear-gradient(90deg, #38bdf8 0%, var(--apple-blue) 100%); }
+
+    /* Instant Feedback on Pointer Down (Apple Core Principle #1) */
+    .card:active {
+      transform: scale(0.97) !important;
+      transition: transform 100ms ease-out !important;
+    }
 
     .card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-lg);
-      border-color: rgba(0, 61, 165, 0.2);
+      transform: translateY(-6px) scale(1.015);
+      box-shadow: var(--shadow-md);
+      background: var(--surface-hover);
+      border-color: rgba(0, 122, 255, 0.25);
     }
 
+    .card:hover::before {
+      height: 6px;
+      opacity: 1;
+    }
+
+    /* Icon Badge */
     .card-icon {
-      width: 58px;
-      height: 58px;
+      width: 54px;
+      height: 54px;
       border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 20px;
-      transition: transform 0.3s ease;
+      transition: transform 0.35s var(--spring-easing), background 0.3s ease;
     }
 
     .card:hover .card-icon {
-      transform: scale(1.1);
+      transform: scale(1.08);
     }
 
     .card.entry-desktop .card-icon {
-      background: rgba(0, 61, 165, 0.1);
+      background: rgba(0, 61, 165, 0.08);
       color: var(--pg-blue);
     }
     body.dark .card.entry-desktop .card-icon {
@@ -229,21 +397,21 @@
     }
 
     .card.entry-mobile .card-icon {
-      background: rgba(0, 163, 224, 0.12);
+      background: rgba(0, 163, 224, 0.1);
       color: var(--pg-light-blue);
     }
 
     .card.exit .card-icon {
-      background: rgba(254, 219, 0, 0.2);
-      color: #b39700;
+      background: rgba(234, 179, 8, 0.14);
+      color: #ca8a04;
     }
     body.dark .card.exit .card-icon {
       color: var(--pg-yellow);
     }
 
     .card.dashboard .card-icon {
-      background: rgba(0, 40, 112, 0.1);
-      color: var(--pg-blue-dark);
+      background: rgba(88, 86, 214, 0.1);
+      color: var(--apple-indigo);
     }
     body.dark .card.dashboard .card-icon {
       background: rgba(56, 189, 248, 0.15);
@@ -251,79 +419,164 @@
     }
 
     .card-title {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1.7rem;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Barlow Condensed", sans-serif;
+      font-size: 1.6rem;
       font-weight: 800;
       color: var(--text);
       margin-bottom: 8px;
+      letter-spacing: -0.02em;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .card-desc {
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.5;
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
       flex-grow: 1;
+      letter-spacing: -0.01em;
     }
 
     .card-footer {
-      margin-top: 20px;
+      margin-top: 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
     .badge-tag {
-      font-size: 0.68rem;
+      font-size: 0.72rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 4px 10px;
-      border-radius: 20px;
+      letter-spacing: 0.02em;
+      padding: 5px 12px;
+      border-radius: 999px;
       background: var(--surface-subtle);
-      color: var(--muted);
+      color: var(--text-secondary);
       border: 1px solid var(--border-color);
+      transition: background 0.3s ease;
     }
 
-    .arrow-icon {
-      color: var(--muted);
-      transition: transform 0.3s ease, color 0.3s ease;
+    .arrow-icon-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: transform 0.35s var(--spring-easing), background 0.3s ease, color 0.3s ease;
     }
 
-    .card:hover .arrow-icon {
+    .card:hover .arrow-icon-circle {
       transform: translateX(4px);
-      color: var(--pg-blue);
-    }
-    body.dark .card:hover .arrow-icon {
-      color: #38bdf8;
+      background: var(--pg-blue);
+      color: #ffffff;
+      border-color: var(--pg-blue);
     }
 
+    body.dark .card:hover .arrow-icon-circle {
+      background: #007aff;
+      border-color: #007aff;
+    }
+
+    /* Footer */
     .footer {
-      margin-top: 50px;
-      font-size: 0.8rem;
-      color: var(--muted);
+      margin-top: 54px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
       font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    /* Reduced Motion & Transparency Media Queries (Apple Core Rule #14) */
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .card:hover {
+        transform: none !important;
+      }
+    }
+
+    @media (prefers-reduced-transparency: reduce) {
+      .card, .logos-hero-container {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: var(--bg) !important;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- P&G Top Accent Ribbon -->
+  <!-- Ambient Light Effect -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- P&G Top Ribbon Accent -->
   <div class="top-ribbon"></div>
 
-  <!-- Theme Switcher -->
-  <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
-    <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
-  </button>
+  <!-- Floating Fixed Top Controls (PWA Install + Theme Switcher) -->
+  <div class="top-controls">
+    <button class="action-btn pwa-btn" id="install-pwa-btn" onclick="installPWA()" title="Install Gate Access Portal App">
+      <span class="material-symbols-outlined" style="font-size: 20px">download_for_offline</span>
+      <span>Install PWA</span>
+    </button>
+
+    <button class="action-btn icon-only" onclick="toggleTheme()" title="Toggle Dark/Light Mode" id="theme-toggle">
+      <span class="material-symbols-outlined" id="theme-icon" style="font-size: 22px">dark_mode</span>
+    </button>
+  </div>
 
   <div class="container">
     <div class="header-area">
-      <div class="logo-wrapper">
-        <span class="material-symbols-outlined" style="font-size: 42px">security</span>
+      <!-- Side-by-Side Official P&G and Securitas Logos -->
+      <div class="logos-hero-container" title="P&G Gate Security Operations powered by Securitas">
+        <!-- P&G Vector Logo -->
+        <div class="logo-pg-box">
+          <svg class="logo-svg-pg" viewBox="0 0 500 500">
+            <defs>
+              <radialGradient id="pgGlobe" cx="35%" cy="30%" r="75%">
+                <stop offset="0%" stop-color="#4dc9ff" />
+                <stop offset="25%" stop-color="#0088ff" />
+                <stop offset="70%" stop-color="#003da5" />
+                <stop offset="100%" stop-color="#001d5c" />
+              </radialGradient>
+              <linearGradient id="highlight" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+              </linearGradient>
+              <filter id="softGlow" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="1" dy="3" stdDeviation="3" flood-color="#001845" flood-opacity="0.4"/>
+              </filter>
+            </defs>
+            <circle cx="250" cy="250" r="235" fill="url(#pgGlobe)" />
+            <path d="M 65 140 A 235 235 0 0 1 250 15 A 235 235 0 0 0 15 250 A 235 235 0 0 0 160 460 A 235 235 0 0 1 65 140 Z" fill="url(#highlight)" opacity="0.6" />
+            <text x="245" y="295" font-family="'Georgia', 'Times New Roman', serif" font-size="185" font-weight="900" font-style="italic" fill="#ffffff" text-anchor="middle" letter-spacing="-6" filter="url(#softGlow)">P&amp;G</text>
+          </svg>
+        </div>
+
+        <div class="logo-divider"></div>
+
+        <!-- Securitas Vector Logo -->
+        <div class="logo-securitas-box">
+          <svg class="logo-svg-securitas" viewBox="0 0 500 300">
+            <g fill="#ff2a3b">
+              <circle cx="130" cy="90" r="54" />
+              <circle cx="250" cy="90" r="54" />
+              <circle cx="370" cy="90" r="54" />
+            </g>
+            <text x="250" y="245" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif" font-size="94" font-weight="800" fill="currentColor" text-anchor="middle" letter-spacing="-2.5">Securitas</text>
+          </svg>
+        </div>
       </div>
+
       <h1 class="title">Gate Access Portal</h1>
-      <p class="subtitle">Select operating terminal or launch analytics board</p>
+      <p class="subtitle">Select operational terminal interface or open security analytics dashboard</p>
     </div>
 
     <div class="grid">
@@ -333,10 +586,12 @@
           <span class="material-symbols-outlined" style="font-size: 28px">desktop_windows</span>
         </div>
         <div class="card-title">POST 7 (Desktop)</div>
-        <div class="card-desc">Desktop terminal interface for logging arriving vehicles, driver details, and cargo destinations.</div>
+        <div class="card-desc">Desktop terminal interface for logging arriving vehicles, driver credentials, and cargo destinations.</div>
         <div class="card-footer">
           <span class="badge-tag">Gate 7 Entry</span>
-          <span class="material-symbols-outlined arrow-icon">arrow_forward</span>
+          <div class="arrow-icon-circle">
+            <span class="material-symbols-outlined" style="font-size: 18px">arrow_forward</span>
+          </div>
         </div>
       </a>
 
@@ -346,10 +601,12 @@
           <span class="material-symbols-outlined" style="font-size: 28px">smartphone</span>
         </div>
         <div class="card-title">POST 7 (Mobile)</div>
-        <div class="card-desc">Touch-optimized mobile interface for security officers on smartphones & mobile devices.</div>
+        <div class="card-desc">Touch-optimized mobile interface for security officers operating on smartphones & handhelds.</div>
         <div class="card-footer">
           <span class="badge-tag">Mobile Terminal</span>
-          <span class="material-symbols-outlined arrow-icon">arrow_forward</span>
+          <div class="arrow-icon-circle">
+            <span class="material-symbols-outlined" style="font-size: 18px">arrow_forward</span>
+          </div>
         </div>
       </a>
 
@@ -359,10 +616,12 @@
           <span class="material-symbols-outlined" style="font-size: 28px">logout</span>
         </div>
         <div class="card-title">POST 1 (Exit)</div>
-        <div class="card-desc">Track departing vehicles, search active cache, calculate time duration, and process bulk checkouts.</div>
+        <div class="card-desc">Track departing vehicles, search active cache, calculate stay duration, and process bulk departures.</div>
         <div class="card-footer">
           <span class="badge-tag">Gate 1 Exit</span>
-          <span class="material-symbols-outlined arrow-icon">arrow_forward</span>
+          <div class="arrow-icon-circle">
+            <span class="material-symbols-outlined" style="font-size: 18px">arrow_forward</span>
+          </div>
         </div>
       </a>
 
@@ -372,10 +631,12 @@
           <span class="material-symbols-outlined" style="font-size: 28px">monitoring</span>
         </div>
         <div class="card-title">DASHBOARD</div>
-        <div class="card-desc">View real-time gate metrics, vehicle entry history, and current active traffic data.</div>
+        <div class="card-desc">View real-time gate metrics, vehicle traffic charts, active stays, and executive entry logs.</div>
         <div class="card-footer">
           <span class="badge-tag">Analytics Board</span>
-          <span class="material-symbols-outlined arrow-icon">arrow_forward</span>
+          <div class="arrow-icon-circle">
+            <span class="material-symbols-outlined" style="font-size: 18px">arrow_forward</span>
+          </div>
         </div>
       </a>
     </div>
@@ -386,6 +647,7 @@
   </div>
 
   <script>
+    // --- THEME TOGGLE ---
     function toggleTheme() {
       document.body.classList.toggle('dark');
       const isDark = document.body.classList.contains('dark');
@@ -398,6 +660,39 @@
       document.getElementById('theme-icon').textContent = 'light_mode';
     }
 
+    // --- PWA INSTALLATION LOGIC ---
+    let deferredPrompt = null;
+    const pwaBtn = document.getElementById('install-pwa-btn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    async function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          if (pwaBtn) pwaBtn.style.opacity = '0.5';
+        }
+        deferredPrompt = null;
+      } else {
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        if (isIOS) {
+          alert("Cara menginstall di iPhone/iPad:\n\n1. Ketuk tombol Share (Bagikan) di bawah browser Safari\n2. Pilih 'Add to Home Screen' ('Tambah ke Layar Utama')");
+        } else {
+          alert("Aplikasi Gate Access Portal telah siap digunakan secara offline atau terinstall.");
+        }
+      }
+    }
+
+    window.addEventListener('appinstalled', () => {
+      if (pwaBtn) pwaBtn.style.display = 'none';
+      deferredPrompt = null;
+    });
+
+    // Register Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
     }

@@ -583,17 +583,15 @@
 
   <!-- Header -->
   <header class="app-bar">
-    <div class="app-brand">
-      <button class="icon-btn" onclick="goBack()" title="Back to Portal">
-        <span class="material-symbols-outlined" style="font-size:22px">arrow_back</span>
-      </button>
-      <a href="index.html" style="text-decoration:none; color:inherit;">
-        <div>
-          <div class="brand-title">POST 1 EXIT</div>
-          <div class="brand-sub">Gate Departure Terminal</div>
-        </div>
-      </a>
-    </div>
+    <a href="index.html" onclick="goBack(event)" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:10px; cursor:pointer;" title="Back to Portal Hub">
+      <div class="brand-icon">
+        <span class="material-symbols-outlined" style="font-size:24px">arrow_back</span>
+      </div>
+      <div>
+        <div class="brand-title">POST 1 EXIT</div>
+        <div class="brand-sub">Gate Departure Terminal</div>
+      </div>
+    </a>
 
     <div class="app-controls">
       <div class="status-badge" id="sync-status">Ready</div>
@@ -622,7 +620,7 @@
     <!-- AUTO SEARCH SECTION -->
     <section class="search-card" id="section-auto">
       <div class="search-input-wrapper">
-        <input type="text" id="search-plate" class="search-input" placeholder="TYPE LICENSE PLATE..." autocomplete="off" oninput="this.value = this.value.toUpperCase(); triggerPlateSearch();">
+        <input type="text" id="search-plate" class="search-input" placeholder="TYPE LICENSE PLATE (e.g. B1234ABC)..." autocomplete="off" oninput="this.value = this.value.toUpperCase().replace(/\s+/g, ''); triggerPlateSearch();">
         <span class="material-symbols-outlined" style="color:var(--text-muted); font-size:28px;">search</span>
       </div>
 
@@ -741,12 +739,9 @@
       localStorage.setItem('gate_portal_theme', isDark ? 'dark' : 'light');
     }
     // Navigation Handler
-    function goBack() {
-      if (window.history.length > 1 && document.referrer && document.referrer.includes(location.host)) {
-        window.history.back();
-      } else {
-        window.location.href = 'index.html';
-      }
+    function goBack(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      window.location.href = 'index.html';
     }
 
     // Local Storage Helpers
@@ -946,7 +941,7 @@
       div.id = rowId;
       div.innerHTML = `
         <div class="bulk-idx">${count}</div>
-        <input type="text" class="bulk-input-plate plate-val" placeholder="B 1234 ABC" oninput="this.value=this.value.toUpperCase();">
+        <input type="text" class="bulk-input-plate plate-val" placeholder="B1234ABC" oninput="this.value=this.value.toUpperCase().replace(/\s+/g, '');">
         <input type="text" class="bulk-input-time time-val" placeholder="HH:MM" maxlength="5">
         <button class="icon-btn" onclick="removeBulkRow('${rowId}')"><span class="material-symbols-outlined">delete</span></button>
       `;
@@ -972,7 +967,7 @@
       const logs = getLogs();
 
       for (let row of rows) {
-        const plate = row.querySelector('.plate-val').value.trim().toUpperCase();
+        const plate = row.querySelector('.plate-val').value.trim().toUpperCase().replace(/\s+/g, '');
         let timeVal = row.querySelector('.time-val').value.trim();
         if (!plate || !timeVal) continue;
 

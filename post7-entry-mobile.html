@@ -339,6 +339,7 @@
       font-size: 0.95rem;
       font-weight: 500;
       outline: none;
+      text-transform: uppercase;
       transition: all 0.2s ease;
     }
 
@@ -606,17 +607,15 @@
 
   <!-- Sticky App Bar -->
   <header class="app-bar">
-    <div class="app-brand">
-      <button class="icon-btn" onclick="goBack()" title="Back to Portal">
+    <a href="index.html" onclick="goBack(event)" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:10px; cursor:pointer;" title="Back to Portal Hub">
+      <div class="brand-icon">
         <span class="material-symbols-outlined" style="font-size:22px">arrow_back</span>
-      </button>
-      <a href="index.html" style="text-decoration:none; color:inherit;">
-        <div>
-          <div class="brand-title">POST 7 ENTRY</div>
-          <div class="brand-sub">Mobile Terminal</div>
-        </div>
-      </a>
-    </div>
+      </div>
+      <div>
+        <div class="brand-title">POST 7 ENTRY</div>
+        <div class="brand-sub">Mobile Terminal</div>
+      </div>
+    </a>
     <div class="app-actions">
       <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
         <span class="material-symbols-outlined" id="theme-icon" style="font-size:20px">dark_mode</span>
@@ -646,7 +645,7 @@
         License Plate Number
       </div>
       <div class="plate-input-wrapper">
-        <input type="text" id="plate" class="plate-input" placeholder="B 1234 ABC" autocomplete="off" maxlength="12" oninput="this.value = this.value.toUpperCase();">
+        <input type="text" id="plate" class="plate-input" placeholder="B1234ABC" autocomplete="off" maxlength="12" oninput="this.value = this.value.toUpperCase().replace(/\s+/g, '');">
       </div>
     </section>
 
@@ -888,16 +887,14 @@
     }
 
     // --- NAVIGATION BACK HANDLER ---
-    function goBack() {
-      if (document.getElementById('bottom-sheet').classList.contains('show')) {
+    function goBack(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const sheet = document.getElementById('bottom-sheet');
+      if (sheet && sheet.classList.contains('show')) {
         closeLogSheet();
         return;
       }
-      if (window.history.length > 1 && document.referrer && document.referrer.includes(location.host)) {
-        window.history.back();
-      } else {
-        window.location.href = 'index.html';
-      }
+      window.location.href = 'index.html';
     }
 
     window.addEventListener('popstate', () => {
@@ -970,23 +967,36 @@
     // --- FORM SUBMISSION ---
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzu2PGoNHtENMa_U3XMfvXMcdiiiBAI2YL8eHzWbUm5K2nkshEAruJSe_m1j-CS9KEx/exec';
 
+    // Auto-Uppercase for all text inputs & No Spaces for Plate
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('input[type="text"]').forEach(input => {
+        input.addEventListener('input', function() {
+          if (this.id === 'plate') {
+            this.value = this.value.toUpperCase().replace(/\s+/g, '');
+          } else {
+            this.value = this.value.toUpperCase();
+          }
+        });
+      });
+    });
+
     async function submitEntry() {
-      const plate = document.getElementById('plate').value.trim().toUpperCase();
-      const driver = document.getElementById('driver').value.trim();
-      const company = document.getElementById('company').value.trim();
-      const ktp = document.getElementById('ktp').value.trim();
-      const helper = document.getElementById('helper').value.trim();
-      const helperID = document.getElementById('helper-id').value.trim();
-      const driverCard = document.getElementById('driver-card').value.trim();
+      const plate = document.getElementById('plate').value.trim().toUpperCase().replace(/\s+/g, '');
+      const driver = document.getElementById('driver').value.trim().toUpperCase();
+      const company = document.getElementById('company').value.trim().toUpperCase();
+      const ktp = document.getElementById('ktp').value.trim().toUpperCase();
+      const helper = document.getElementById('helper').value.trim().toUpperCase();
+      const helperID = document.getElementById('helper-id').value.trim().toUpperCase();
+      const driverCard = document.getElementById('driver-card').value.trim().toUpperCase();
       const simEl = document.querySelector('input[name="simtype"]:checked');
       const vtypeEl = document.querySelector('input[name="vtype"]:checked');
 
       const destEls = document.querySelectorAll('input[name="dest"]:checked');
       const destValue = Array.from(destEls).map(el => el.value).join('/');
 
-      const approver = document.getElementById('approver').value.trim();
-      const products = document.getElementById('products').value.trim();
-      const details = document.getElementById('details').value.trim();
+      const approver = document.getElementById('approver').value.trim().toUpperCase();
+      const products = document.getElementById('products').value.trim().toUpperCase();
+      const details = document.getElementById('details').value.trim().toUpperCase();
 
       const annotationEls = document.querySelectorAll('input[name="annotation"]:checked');
       const annotations = Array.from(annotationEls).map(el => el.value).join(', ');

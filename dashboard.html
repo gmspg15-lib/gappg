@@ -457,17 +457,15 @@
 
   <!-- Header Bar -->
   <header class="app-bar">
-    <div class="app-brand">
-      <button class="icon-btn" onclick="goBack()" title="Back to Portal">
-        <span class="material-symbols-outlined" style="font-size:22px">arrow_back</span>
-      </button>
-      <a href="index.html" style="text-decoration:none; color:inherit;">
-        <div>
-          <div class="brand-title">VEHICLE ENTRY DASHBOARD</div>
-          <div class="brand-sub">P&G Operational Gate Intelligence</div>
-        </div>
-      </a>
-    </div>
+    <a href="index.html" onclick="goBack(event)" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:10px; cursor:pointer;" title="Back to Portal Hub">
+      <div class="brand-icon">
+        <span class="material-symbols-outlined" style="font-size:24px">arrow_back</span>
+      </div>
+      <div>
+        <div class="brand-title">VEHICLE ENTRY DASHBOARD</div>
+        <div class="brand-sub">P&G Operational Gate Intelligence</div>
+      </div>
+    </a>
 
     <div class="app-controls">
       <button class="btn-action" id="btn-refresh">
@@ -618,12 +616,9 @@
 
   <script type="module" src="./dashboard.js"></script>
   <script>
-    function goBack() {
-      if (window.history.length > 1 && document.referrer && document.referrer.includes(location.host)) {
-        window.history.back();
-      } else {
-        window.location.href = 'index.html';
-      }
+    function goBack(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      window.location.href = 'index.html';
     }
 
     function toggleTheme() {

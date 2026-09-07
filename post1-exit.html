@@ -30,6 +30,7 @@
       --shadow-md: 0 8px 24px rgba(0, 61, 165, 0.08);
 
       --safe-bottom: env(safe-area-inset-bottom, 16px);
+      --accent-blue: var(--pg-blue);
     }
 
     body.dark {
@@ -41,6 +42,7 @@
       --border-color: #1e293b;
       --chip-bg: #1e293b;
       --chip-text: #cbd5e1;
+      --accent-blue: #38bdf8;
       --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
       --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
@@ -575,8 +577,22 @@
       border: 1px solid #f87171;
     }
   </style>
+  <script>
+    (function() {
+      const saved = localStorage.getItem('gate_portal_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
 </head>
 <body>
+  <script>
+    if (document.documentElement.classList.contains('dark')) {
+      document.body.classList.add('dark');
+    }
+  </script>
 
   <!-- Top Ribbon -->
   <div class="top-ribbon"></div>
@@ -733,11 +749,44 @@
 
     // Theme Toggle
     function toggleTheme() {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      document.getElementById('theme-icon').textContent = isDark ? 'light_mode' : 'dark_mode';
-      localStorage.setItem('gate_portal_theme', isDark ? 'dark' : 'light');
+      const currentlyDark = document.documentElement.classList.contains('dark') || document.body.classList.contains('dark');
+      const wantDark = !currentlyDark;
+      
+      if (wantDark) {
+        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
+        localStorage.setItem('gate_portal_theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
+        localStorage.setItem('gate_portal_theme', 'light');
+      }
+      
+      const icon = document.getElementById('theme-icon');
+      if (icon) {
+        icon.textContent = wantDark ? 'light_mode' : 'dark_mode';
+      }
     }
+
+    function initTheme() {
+      const saved = localStorage.getItem('gate_portal_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = saved === 'dark' || (!saved && prefersDark);
+      
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
+      }
+      
+      const icon = document.getElementById('theme-icon');
+      if (icon) {
+        icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+      }
+    }
+    initTheme();
     // Navigation Handler
     function goBack(e) {
       if (e && e.preventDefault) e.preventDefault();
@@ -868,48 +917,54 @@
 
     async function processSingleExit() {
       if (!currentRecord) return;
+      const btn = document.getElementById('btn-process-exit');
+      if (btn) btn.disabled = true;
 
-      const now = new Date();
-      const timeOutStr = String(now.getHours()).padStart(2,'0') + ':' +
-                         String(now.getMinutes()).padStart(2,'0') + ':' +
-                         String(now.getSeconds()).padStart(2,'0');
-      
-      const inTime = new Date(currentRecord.fullTimeIn);
-      const diffMs = Math.max(0, now - inTime);
-      const durationStr = (diffMs / 3600000).toFixed(1) + ' Jam';
+      try {
+        const now = new Date();
+        const timeOutStr = String(now.getHours()).padStart(2,'0') + ':' +
+                           String(now.getMinutes()).padStart(2,'0') + ':' +
+                           String(now.getSeconds()).padStart(2,'0');
+        
+        const inTime = new Date(currentRecord.fullTimeIn);
+        const diffMs = Math.max(0, now - inTime);
+        const durationStr = (diffMs / 3600000).toFixed(1) + ' Jam';
 
-      const exitRecord = {
-        ...currentRecord,
-        timeOut: timeOutStr,
-        fullTimeOut: now.toISOString(),
-        duration: durationStr,
-        postOut: 'Post 1'
-      };
+        const exitRecord = {
+          ...currentRecord,
+          timeOut: timeOutStr,
+          fullTimeOut: now.toISOString(),
+          duration: durationStr,
+          postOut: 'Post 1'
+        };
 
-      const logs = getLogs();
-      const idx = logs.findIndex(e => e.id === currentRecord.id);
-      if (idx !== -1) {
-        logs[idx].timeOut = timeOutStr;
-        logs[idx].fullTimeOut = now.toISOString();
-        logs[idx].duration = durationStr;
-        saveLogs(logs);
+        const logs = getLogs();
+        const idx = logs.findIndex(e => e.id === currentRecord.id);
+        if (idx !== -1) {
+          logs[idx].timeOut = timeOutStr;
+          logs[idx].fullTimeOut = now.toISOString();
+          logs[idx].duration = durationStr;
+          saveLogs(logs);
+        }
+
+        const exitLogs = getExitLogs();
+        exitLogs.push(exitRecord);
+        saveExitLogs(exitLogs);
+
+        if (activeEntriesCache) {
+          activeEntriesCache = activeEntriesCache.filter(e => e.id !== currentRecord.id);
+        }
+
+        // Submit to Google Sheets
+        sendExitToSheets(exitRecord);
+
+        showToast(`Exit Processed: ${currentRecord.plate} (${durationStr})`);
+        document.getElementById('search-plate').value = '';
+        hideResult();
+        renderExitLogs();
+      } finally {
+        if (btn) btn.disabled = false;
       }
-
-      const exitLogs = getExitLogs();
-      exitLogs.push(exitRecord);
-      saveExitLogs(exitLogs);
-
-      if (activeEntriesCache) {
-        activeEntriesCache = activeEntriesCache.filter(e => e.id !== currentRecord.id);
-      }
-
-      // Submit to Google Sheets
-      sendExitToSheets(exitRecord);
-
-      showToast(`Exit Processed: ${currentRecord.plate} (${durationStr})`);
-      document.getElementById('search-plate').value = '';
-      hideResult();
-      renderExitLogs();
     }
 
     async function sendExitToSheets(entry) {
@@ -953,6 +1008,9 @@
       if (row) row.remove();
       let idx = 1;
       document.querySelectorAll('.bulk-idx').forEach(el => { el.textContent = idx++; });
+      if (document.querySelectorAll('.bulk-row').length === 0) {
+        addBulkRow();
+      }
     }
 
     function fillAllTimesNow() {
@@ -1031,9 +1089,9 @@
       tbody.innerHTML = logs.slice().reverse().map(e => `
         <tr>
           <td style="font-family:'Share Tech Mono',monospace;">${e.timeIn}</td>
-          <td style="font-family:'Share Tech Mono',monospace; color:var(--pg-blue); font-weight:700;">${e.timeOut}</td>
+          <td style="font-family:'Share Tech Mono',monospace; color:var(--accent-blue); font-weight:700;">${e.timeOut}</td>
           <td style="font-weight:700;">${e.duration}</td>
-          <td style="font-family:'Share Tech Mono',monospace; font-weight:700; color:var(--pg-blue);">${e.plate}</td>
+          <td style="font-family:'Share Tech Mono',monospace; font-weight:700; color:var(--accent-blue);">${e.plate}</td>
           <td>${e.driver || '—'}</td>
           <td style="color:var(--text-muted);">${e.company || '—'}</td>
           <td>${e.vtype || '—'}</td>

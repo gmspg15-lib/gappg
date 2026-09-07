@@ -369,11 +369,18 @@
 
     .pill-input {
       position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       opacity: 0;
-      pointer-events: none;
+      cursor: pointer;
+      z-index: 2;
     }
 
     .pill-label {
+      position: relative;
+      z-index: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -583,8 +590,22 @@
       border: 1px solid #f87171;
     }
   </style>
+  <script>
+    (function() {
+      const saved = localStorage.getItem('gate_portal_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
 </head>
 <body>
+  <script>
+    if (document.documentElement.classList.contains('dark')) {
+      document.body.classList.add('dark');
+    }
+  </script>
 
   <!-- Top Ribbon -->
   <div class="top-ribbon"></div>
@@ -813,15 +834,44 @@
 
     // Theme Toggle
     function toggleTheme() {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      document.getElementById('theme-icon').textContent = isDark ? 'light_mode' : 'dark_mode';
-      localStorage.setItem('gate_portal_theme', isDark ? 'dark' : 'light');
+      const currentlyDark = document.documentElement.classList.contains('dark') || document.body.classList.contains('dark');
+      const wantDark = !currentlyDark;
+      
+      if (wantDark) {
+        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
+        localStorage.setItem('gate_portal_theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
+        localStorage.setItem('gate_portal_theme', 'light');
+      }
+      
+      const icon = document.getElementById('theme-icon');
+      if (icon) {
+        icon.textContent = wantDark ? 'light_mode' : 'dark_mode';
+      }
     }
-    if (localStorage.getItem('gate_portal_theme') === 'dark') {
-      document.body.classList.add('dark');
-      document.getElementById('theme-icon').textContent = 'light_mode';
+
+    function initTheme() {
+      const saved = localStorage.getItem('gate_portal_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = saved === 'dark' || (!saved && prefersDark);
+      
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
+      }
+      
+      const icon = document.getElementById('theme-icon');
+      if (icon) {
+        icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+      }
     }
+    initTheme();
 
     // Local Storage
     const LOGS_KEY = 'gate_entry_logs';

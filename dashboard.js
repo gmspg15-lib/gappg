@@ -74,7 +74,7 @@ function renderTopCompanies(data) {
   const html = topCompanies.map((c, i) => `
     <div class="item-row">
       <span style="font-weight:700;">${c.company}</span>
-      <span style="font-weight:700; color:var(--pg-blue); font-size:0.8rem; background:rgba(0,61,165,0.08); padding:2px 8px; border-radius:6px;">${c.count} Entries</span>
+      <span style="font-weight:700; color:var(--accent-blue); font-size:0.8rem; background:var(--accent-subtle); padding:2px 8px; border-radius:6px;">${c.count} Entries</span>
     </div>
   `).join('');
   document.getElementById('top-companies-list').innerHTML = html || '<div style="font-size:0.85rem; color:var(--text-muted);">No companies logged for this date.</div>';
@@ -85,7 +85,7 @@ function renderDestinations(data) {
   const html = destinations.map(d => `
     <div class="item-row">
       <span style="color:var(--text-muted); font-weight:600;">${d.destination}</span>
-      <span style="font-weight:800; color:var(--pg-blue);">${d.percentage}%</span>
+      <span style="font-weight:800; color:var(--accent-blue);">${d.percentage}%</span>
     </div>
   `).join('');
   document.getElementById('destination-list').innerHTML = html || '<div style="font-size:0.85rem; color:var(--text-muted);">No destinations logged for this date.</div>';
@@ -107,7 +107,7 @@ function renderTable(data) {
     return `
       <tr>
         <td style="font-family:'Share Tech Mono',monospace;">${r.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})}</td>
-        <td style="font-family:'Share Tech Mono',monospace; font-weight:700; color:var(--pg-blue);">${r.plate_number}</td>
+        <td style="font-family:'Share Tech Mono',monospace; font-weight:700; color:var(--accent-blue);">${r.plate_number}</td>
         <td>${r.driver_name || '—'}</td>
         <td style="color:var(--text-muted);">${r.company || '—'}</td>
         <td>${r.destination || '—'}</td>

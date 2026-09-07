@@ -362,11 +362,19 @@
 
     .pill-input {
       position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       opacity: 0;
-      pointer-events: none;
+      cursor: pointer;
+      z-index: 2;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .pill-label {
+      position: relative;
+      z-index: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -402,6 +410,19 @@
       background: #eab308;
       color: #000000;
       border-color: #facc15;
+    }
+
+    /* Field Error Highlight */
+    .field-group.field-error, .plate-hero-card.field-error {
+      border: 2px solid #ef4444 !important;
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2) !important;
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
     }
 
     /* Fixed Bottom Action Bar */
@@ -599,8 +620,22 @@
       color: #f87171;
     }
   </style>
+  <script>
+    (function() {
+      const saved = localStorage.getItem('gate_portal_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
 </head>
 <body>
+  <script>
+    if (document.documentElement.classList.contains('dark')) {
+      document.body.classList.add('dark');
+    }
+  </script>
 
   <!-- Top Accent Ribbon -->
   <div class="top-ribbon"></div>
@@ -852,15 +887,44 @@
 
     // --- THEME TOGGLE ---
     function toggleTheme() {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      document.getElementById('theme-icon').textContent = isDark ? 'light_mode' : 'dark_mode';
-      localStorage.setItem('gate_portal_theme', isDark ? 'dark' : 'light');
+      const currentlyDark = document.documentElement.classList.contains('dark') || document.body.classList.contains('dark');
+      const wantDark = !currentlyDark;
+      
+      if (wantDark) {
+        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
+        localStorage.setItem('gate_portal_theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
+        localStorage.setItem('gate_portal_theme', 'light');
+      }
+      
+      const icon = document.getElementById('theme-icon');
+      if (icon) {
+        icon.textContent = wantDark ? 'light_mode' : 'dark_mode';
+      }
     }
-    if (localStorage.getItem('gate_portal_theme') === 'dark') {
-      document.body.classList.add('dark');
-      document.getElementById('theme-icon').textContent = 'light_mode';
+
+    function initTheme() {
+      const saved = localStorage.getItem('gate_portal_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = saved === 'dark' || (!saved && prefersDark);
+      
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
+      }
+      
+      const icon = document.getElementById('theme-icon');
+      if (icon) {
+        icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+      }
     }
+    initTheme();
 
     // --- LOCAL STORAGE LOGIC ---
     const LOGS_KEY = 'gate_entry_logs_mobile';
@@ -909,7 +973,6 @@
       renderLogSheet();
       document.getElementById('sheet-overlay').classList.add('show');
       document.getElementById('bottom-sheet').classList.add('show');
-      try { history.pushState({ drawerOpen: true }, ''); } catch (e) {}
     }
     function closeLogSheet() {
       document.getElementById('sheet-overlay').classList.remove('show');
@@ -962,6 +1025,25 @@
       document.getElementById('products').value = '';
       document.getElementById('details').value = '';
       document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(r => r.checked = false);
+      document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+      showToast('Form Reset');
+    }
+
+    // --- FIELD ERROR HIGHLIGHT & SCROLL ---
+    function highlightError(fieldId, msg) {
+      showToast(msg, true);
+      let el = document.getElementById(fieldId);
+      if (!el) {
+        const rad = document.querySelector(`input[name="${fieldId}"]`);
+        if (rad) el = rad.closest('.form-card') || rad.closest('.field-group');
+      } else {
+        el = el.closest('.field-group') || el.closest('.plate-hero-card') || el;
+      }
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('field-error');
+        setTimeout(() => el.classList.remove('field-error'), 3000);
+      }
     }
 
     // --- FORM SUBMISSION ---
@@ -1004,15 +1086,15 @@
       const shipmentEls = document.querySelectorAll('input[name="shipment"]:checked');
       const shipments = Array.from(shipmentEls).map(el => el.value).join(', ');
 
-      if (!plate) return showToast('Enter License Plate', true);
-      if (!driver) return showToast('Enter Driver Name', true);
-      if (!ktp) return showToast('Enter Driver ID (KTP)', true);
-      if (!company) return showToast('Enter Company Name', true);
-      if (!simEl) return showToast('Select SIM Type', true);
-      if (!driverCard) return showToast('Enter Driver Card Badge No', true);
-      if (!vtypeEl) return showToast('Select Vehicle Type', true);
-      if (destEls.length === 0) return showToast('Select at least 1 Destination', true);
-      if (!shipments) return showToast('Select Shipment Action', true);
+      if (!plate) return highlightError('plate', 'Enter License Plate');
+      if (!driver) return highlightError('driver', 'Enter Driver Name');
+      if (!ktp) return highlightError('ktp', 'Enter Driver ID (KTP)');
+      if (!company) return highlightError('company', 'Enter Company Name');
+      if (!simEl) return highlightError('simtype', 'Select SIM Type');
+      if (!driverCard) return highlightError('driver-card', 'Enter Driver Card Badge No');
+      if (!vtypeEl) return highlightError('vtype', 'Select Vehicle Type');
+      if (destEls.length === 0) return highlightError('dest', 'Select at least 1 Destination');
+      if (!shipments) return highlightError('shipment', 'Select Shipment Action');
 
       const btn = document.getElementById('btn-submit');
       btn.disabled = true;
